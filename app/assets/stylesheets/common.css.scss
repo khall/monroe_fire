@@ -1,0 +1,12 @@
+body {
+  font: sans-serif;
+  line-height: 16px;
+  background-color: antiquewhite;
+}
+
+#main {
+  margin: 0 auto;
+  width: $width;
+  background-color: white;
+  @include border(black, 3px, 5px, 5px);
+}

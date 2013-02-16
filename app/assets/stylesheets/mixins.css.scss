@@ -1,0 +1,26 @@
+@mixin border($color, $non_rounded, $top, $bottom) {
+  border: $non_rounded solid $color;
+  border-radius: $top $top $bottom $bottom;
+  -moz-border-radius: $top $top $bottom $bottom;
+}
+
+@mixin background($from, $to) {
+  /* default background colour, for all layout engines that don't implement gradients */
+  background: $to;
+  /* gecko based browsers */
+  background: -moz-linear-gradient(top, $from, $to);
+  /* webkit based browsers */
+  background: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
+}
+
+@mixin shadow($x_offset, $y_offset, $blur_distance, $color, $set) {
+  @if $set == inset {
+    -moz-box-shadow: $x_offset $y_offset $blur_distance $color inset;
+    -webkit-box-shadow: $x_offset $y_offset $blur_distance $color inset;
+    box-shadow: $x_offset $y_offset $blur_distance $color inset;
+  } @else {
+    -moz-box-shadow: $x_offset $y_offset $blur_distance $color;
+    -webkit-box-shadow: $x_offset $y_offset $blur_distance $color;
+    box-shadow: $x_offset $y_offset $blur_distance $color;
+  }
+}
