@@ -1,2 +1,12 @@
 #page_header
   = link_to image_tag('header.png')
+  %ul.navbar
+    %li= link_to t('home'), home_path
+    %li= link_to t('calendar'), calendars_path
+    %li= link_to t('pictures'), pictures_path
+    %li= link_to t('contact_info'), contact_infos_path
+    %li= link_to t('equipment'), equipments_path
+    %li= link_to t('online_training'), trainings_path
+    %li= link_to t('runs'), runs_path
+    %li= link_to t('community_pages'), community_pages_path
+    %li= link_to t('other_resources'), other_resources_path

@@ -1,0 +1,10 @@
+.navbar {
+  border-top: 3px solid black;
+  border-bottom: 3px solid black;
+
+  li {
+    display: inline-block;
+    padding: 5px;
+    border-right: 3px solid black;
+  }
+}

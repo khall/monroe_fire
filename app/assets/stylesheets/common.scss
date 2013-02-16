@@ -1,12 +1,28 @@
 body {
   font: sans-serif;
   line-height: 16px;
-  background-color: antiquewhite;
+  background-color: ivory;
 }
 
 #main {
   margin: 0 auto;
   width: $width;
   background-color: white;
-  @include border(black, 3px, 5px, 5px);
+  @include border(lightgray, 2px, 5px, 5px);
+}
+
+#content {
+  padding: 20px;
+}
+
+#header {
+  img {
+    width: 100%;
+    height: 150px;
+  }
+}
+
+#footer {
+  border-top: 1px solid lightgray;
+  padding: 10px 20px 0;
 }

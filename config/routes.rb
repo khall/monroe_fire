@@ -2,6 +2,16 @@ Fire::Application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
+  resources :calendars
+  resources :pictures
+  resources :contact_infos
+  resources :equipments
+  resources :trainings
+  resources :runs
+  resources :community_pages
+  resources :other_resources
+  resources :homes
+
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
