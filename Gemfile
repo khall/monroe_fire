@@ -5,7 +5,8 @@ gem 'cancan'
 gem 'devise'
 gem 'haml'
 gem 'rails', '3.2.9'
-gem 'spud_photos'
+gem 'comfortable_mexican_sofa'
+#gem 'spud_photos'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
