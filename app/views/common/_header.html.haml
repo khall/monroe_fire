@@ -1,7 +1,8 @@
 #page_header
   = link_to image_tag('header.png')
   %ul.navbar
-    %li= link_to t('home'), homes_path
+    = link_to homes_path do
+      %li t('home')
     %li= link_to t('calendar'), calendars_path
     %li= link_to t('pictures'), pictures_path
     %li= link_to t('contact_info'), contact_infos_path
