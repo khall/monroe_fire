@@ -5,6 +5,7 @@ gem 'cancan'
 gem 'devise'
 gem 'haml'
 gem 'rails', '3.2.9'
+gem 'thin'
 
 # CMS
 gem 'comfortable_mexican_sofa'
@@ -33,7 +34,7 @@ gem 'jquery-rails'
 group :test do
   gem 'autotest'
   gem 'autotest-fsevent'
-  gem 'rspec'
+  gem 'rspec-rails'
 end
 
 # To use ActiveModel has_secure_password
