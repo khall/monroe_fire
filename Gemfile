@@ -6,6 +6,7 @@ gem 'devise'
 gem 'haml'
 gem 'rails', '3.2.9'
 gem 'thin'
+gem 'unicorn'
 
 # CMS
 gem 'comfortable_mexican_sofa'
