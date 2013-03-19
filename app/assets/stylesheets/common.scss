@@ -1,5 +1,5 @@
 body {
-  font: sans-serif;
+  font-family: helvetica, arial, sans-serif;
   line-height: 16px;
   background-color: ivory;
 }
@@ -16,13 +16,34 @@ body {
 }
 
 #page_header {
-  img {
-    width: 100%;
-    height: 150px;
+  #header_img {
+    height: 264px;
+  }
+
+  .navbar {
+    padding: 0;
+    margin-top: 0;
+    background-color: $monroe_blue;
+
+    a {
+      text-decoration: none;
+    }
+
+    li {
+      display: inline-block;
+      padding: 5px;
+      border-right: 3px solid white;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      line-height: 25px;
+    }
+    li:hover {
+      background-color: $blue;
+    }
   }
 }
-
 #page_footer {
   border-top: 1px solid lightgray;
-  padding: 10px 20px 0;
+  padding: 15px;
 }

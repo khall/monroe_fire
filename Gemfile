@@ -4,13 +4,16 @@ gem 'calendar_helper'
 gem 'cancan'
 gem 'devise'
 gem 'haml'
-gem 'rails', '3.2.9'
+gem 'rails', '3.2.12'
 gem 'thin'
 gem 'unicorn'
+gem 'rmagick'
+
+gem 'execjs'
+gem 'therubyracer'
 
 # CMS
 gem 'comfortable_mexican_sofa'
-gem 'comfy_gallery'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
