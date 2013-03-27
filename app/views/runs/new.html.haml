@@ -1,0 +1,20 @@
+.notice
+  = flash[:notice]
+.error
+  = flash[:error]
+
+%p
+  = link_to "Return to runs list", runs_path
+
+%p
+  Paste Excel row into text field below and click "Add Run"
+
+= form_tag runs_path, method: "post" do
+  = label_tag :excel_str, "Excel row string"
+  = text_field_tag :excel_str
+  = submit_tag "Add Run"
+
+%p.help
+  Excel columns should be in the following order: Date, Alarm #, Burn compliants, Fire, Rescue, MVC, HazMat, Mutual aid, Total time out, # of personnel responding, Response time in route, Response time to scene, Alarm time, In route, 1st arrived, In quarters
+%p.help
+  Burn complaints, Fire, Rescue, MVC, HazMat, Mutual aid should be blank or have a 1 in the Excel cell.

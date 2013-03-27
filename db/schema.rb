@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130217053242) do
+ActiveRecord::Schema.define(:version => 20130326053842) do
 
   create_table "cms_blocks", :force => true do |t|
     t.integer  "page_id",    :null => false
@@ -130,34 +130,17 @@ ActiveRecord::Schema.define(:version => 20130217053242) do
   add_index "cms_snippets", ["site_id", "identifier"], :name => "index_cms_snippets_on_site_id_and_identifier", :unique => true
   add_index "cms_snippets", ["site_id", "position"], :name => "index_cms_snippets_on_site_id_and_position"
 
-  create_table "gallery_galleries", :force => true do |t|
-    t.string   "title",                                :null => false
-    t.string   "identifier",                           :null => false
-    t.text     "description"
-    t.integer  "full_width",        :default => 640,   :null => false
-    t.integer  "full_height",       :default => 480,   :null => false
-    t.boolean  "force_ratio_full",  :default => false, :null => false
-    t.integer  "thumb_width",       :default => 150,   :null => false
-    t.integer  "thumb_height",      :default => 150,   :null => false
-    t.boolean  "force_ratio_thumb", :default => true,  :null => false
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+  create_table "runs", :force => true do |t|
+    t.datetime "date"
+    t.integer  "alarm_number"
+    t.string   "run_type"
+    t.integer  "number_of_responders"
+    t.integer  "time_out"
+    t.datetime "in_route_time"
+    t.datetime "arrived_time"
+    t.datetime "in_quarters_time"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
   end
-
-  add_index "gallery_galleries", ["identifier"], :name => "index_gallery_galleries_on_identifier"
-
-  create_table "gallery_photos", :force => true do |t|
-    t.integer  "gallery_id",                        :null => false
-    t.string   "title"
-    t.text     "description"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.integer  "position",           :default => 0, :null => false
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
-  end
-
-  add_index "gallery_photos", ["gallery_id", "position"], :name => "index_gallery_photos_on_gallery_id_and_position"
 
 end

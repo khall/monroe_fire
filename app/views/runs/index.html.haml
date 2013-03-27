@@ -1,0 +1,27 @@
+%table
+  %thead
+    %th Date
+    %th Alarm #
+    %th Type
+    %th Total time out
+    %th # personnel responding
+    %th Response time in route
+    %th Response time to scene
+    %th Alarm time
+    %th In route
+    %th First arrived
+    %th In quarters
+  %tbody
+    - @runs.each do |run|
+      %tr
+        %td= run.date.strftime('%D')
+        %td= run.alarm_number
+        %td= run.run_type.humanize
+        %td= pretty_time run.total_time_out
+        %td= run.number_of_responders
+        %td= pretty_time run.minutes_in_route
+        %td= pretty_time run.minutes_to_scene
+        %td= run.date.strftime('%R')
+        %td= run.in_route_time.strftime('%R')
+        %td= run.arrived_time.strftime('%R')
+        %td= run.in_quarters_time.strftime('%R')
