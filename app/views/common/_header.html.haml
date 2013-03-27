@@ -1,21 +1,20 @@
 #page_header
-  = link_to image_tag('header.png')
+  #header_img
+    = link_to image_tag("/system/cms/files/files/000/000/045/original/monroe_fire_header.jpg")
   %ul.navbar
-    = link_to homes_path do
-      %li= t('home')
-    = link_to calendars_path do
-      %li= t('calendar')
-    = link_to pictures_path do
-      %li= t('pictures')
-    = link_to contact_infos_path do
-      %li= t('contact-info')
-    = link_to equipments_path do
-      %li= t('equipment')
-    = link_to trainings_path do
-      %li= t('online_training')
-    = link_to runs_path do
-      %li= t('runs')
-    = link_to community_pages_path do
-      %li= t('community_pages')
-    = link_to other_resources_path do
-      %li= t('other_resources')
+    = link_to "/calendar" do
+      %li Calendar
+    = link_to "/contact-info" do
+      %li Contact Info
+    = link_to "/equipment" do
+      %li Equipment
+    = link_to "/staff" do
+      %li Staff
+    = link_to "/runs" do
+      %li Runs
+    = link_to "/community_pages" do
+      %li Community Pages
+    = link_to "/board-of-directors" do
+      %li Board Members
+    = link_to "/other-resources" do
+      %li Other Resources
