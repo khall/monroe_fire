@@ -18,3 +18,7 @@
   Excel columns should be in the following order: Date, Alarm #, Burn compliants, Fire, Rescue, MVC, HazMat, Mutual aid, Total time out, # of personnel responding, Response time in route, Response time to scene, Alarm time, In route, 1st arrived, In quarters
 %p.help
   Burn complaints, Fire, Rescue, MVC, HazMat, Mutual aid should be blank or have a 1 in the Excel cell.
+
+%script{src: "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"}
+:javascript
+  $('#excel_str').focus()
