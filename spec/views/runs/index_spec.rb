@@ -18,4 +18,30 @@ describe "runs/index" do
     rendered.should =~ /Burn complaint/
     rendered.should =~ /Mvc/
   end
+
+  it "figures out what day of the week has the most calls" do
+    runs = [Fabricate(:run, date: DateTime.parse('2013/03/06 00:00:00')),
+            Fabricate(:run, date: DateTime.parse('2013/03/13 00:00:00')),
+            Fabricate(:run, date: DateTime.parse('2013/03/20 00:00:00')),
+            Fabricate(:run, date: DateTime.parse('2013/03/21 00:00:00')),
+            Fabricate(:run, date: DateTime.parse('2013/03/19 00:00:00')),
+            Fabricate(:run, date: DateTime.parse('2013/03/19 00:00:00'))
+           ]
+    assign(:runs, runs)
+    render
+    rendered.should =~ /Day of the week most likely to have calls: Wednesday/
+  end
+
+  it "figures out what time of day has the most calls" do
+    runs = [Fabricate(:run, date: DateTime.parse('2013/03/06 15:00:00')),
+            Fabricate(:run, date: DateTime.parse('2013/03/13 15:50:00')),
+            Fabricate(:run, date: DateTime.parse('2013/03/20 13:00:00')),
+            Fabricate(:run, date: DateTime.parse('2013/03/21 12:00:00')),
+            Fabricate(:run, date: DateTime.parse('2013/03/19 03:00:00')),
+            Fabricate(:run, date: DateTime.parse('2013/03/19 22:00:00'))
+    ]
+    assign(:runs, runs)
+    render
+    rendered.should =~ /Hour of day most likely to have calls: 15:00/
+  end
 end

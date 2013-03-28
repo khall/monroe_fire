@@ -3,6 +3,20 @@
     text-align: center;
   }
 
+- days_of_week = %w|Sunday Monday Tuesday Wednesday Thursday Friday Saturday|
+- weekdays = @runs.map{|r| r.date.wday}
+- sorted_popularity = weekdays.inject(Hash.new(0)) do |sum_arr, day|
+  - sum_arr[day] += 1
+  - sum_arr
+- most_popular_day = sorted_popularity.sort_by{|day| day[1]}.last[0]
+%p= "Day of the week most likely to have calls: #{days_of_week[most_popular_day]}"
+- weekdays = @runs.map{|r| r.date.hour}
+- sorted_popularity = weekdays.inject(Hash.new(0)) do |sum_arr, hour|
+  - sum_arr[hour] += 1
+  - sum_arr
+- most_popular_hour = sorted_popularity.sort_by{|hour| hour[1]}.last[0]
+%p= "Hour of day most likely to have calls: #{pretty_time(most_popular_hour * 60)}"
+
 %table
   %thead
     %th Date
