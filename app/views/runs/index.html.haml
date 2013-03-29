@@ -3,24 +3,12 @@
     text-align: center;
   }
 
-- days_of_week = %w|Sunday Monday Tuesday Wednesday Thursday Friday Saturday|
-- weekdays = @runs.map{|r| r.date.wday}
-- sorted_popularity = weekdays.inject(Hash.new(0)) do |sum_arr, day|
-  - sum_arr[day] += 1
-  - sum_arr
-- sorted_popularity = sorted_popularity.sort_by{|day| day[1]}
-- most_popular_days = sorted_popularity.select{|day| day[1] == sorted_popularity.last[1]}.sort
-- day_str = most_popular_days.length > 1 ? "Tie (#{most_popular_days.map{|day| days_of_week[day[0]]}.join(', ')})" : days_of_week[most_popular_days[0][0]]
-%p= "Day of the week most likely to have calls: #{day_str}"
-- weekdays = @runs.map{|r| r.date.hour}
-- sorted_popularity = weekdays.inject(Hash.new(0)) do |sum_arr, hour|
-  - sum_arr[hour] += 1
-  - sum_arr
-- sorted_popularity = sorted_popularity.sort_by{|hour| hour[1]}
-- most_popular_hours = sorted_popularity.select{|hour_data| hour_data[1] == sorted_popularity.last[1]}
-- formatted_hours = most_popular_hours.map{|hour_data| pretty_time(hour_data[0], hours: true, pad: true)}
-- hour_str = formatted_hours.length > 1 ? "Tie (#{formatted_hours.join(', ')})" : formatted_hours[0]
-%p= "Hour of day most likely to have calls: #{hour_str}"
+- day_data = day_stats
+%p= "Day of the week most likely to have calls: #{day_data[:most]}"
+%p= "Day of the week least likely to have calls: #{day_data[:least]}"
+- hour_data = hour_stats
+%p= "Hour of day most likely to have calls: #{hour_data[:most]}"
+%p= "Hour of day least likely to have calls: #{hour_data[:least]}"
 
 %table
   %thead
