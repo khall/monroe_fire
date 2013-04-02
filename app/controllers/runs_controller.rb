@@ -1,4 +1,6 @@
 class RunsController < ApplicationController
+  before_filter :authenticate_user!, only: [:new, :create]
+  load_and_authorize_resource
   EXCEL_ROWS = 11
 
   def index
@@ -59,12 +61,17 @@ class RunsController < ApplicationController
   end
 
   def set_dates(run, run_array)
-    date = DateTime.strptime("#{run_array[0]} #{run_array[7]}", "%D %k:%M")
+    if run_array[0].match(%r|\d+/\d+/(\d+)|)[1].length == 2
+      date_format = "%D %k:%M"
+    else
+      date_format = "%m/%d/%Y %k:%M"
+    end
+    date = DateTime.strptime("#{run_array[0]} #{run_array[7]}", date_format)
     tomorrow_str = (date + 1.day).strftime("%D")
 
-    in_route_time = DateTime.strptime("#{run_array[0]} #{run_array[8]}", "%D %k:%M")
-    arrived_time = DateTime.strptime("#{run_array[0]} #{run_array[9]}", "%D %k:%M")
-    in_quarters_time = DateTime.strptime("#{run_array[0]} #{run_array[10]}", "%D %k:%M")
+    in_route_time = DateTime.strptime("#{run_array[0]} #{run_array[8]}", date_format)
+    arrived_time = DateTime.strptime("#{run_array[0]} #{run_array[9]}", date_format)
+    in_quarters_time = DateTime.strptime("#{run_array[0]} #{run_array[10]}", date_format)
 
     in_route_time += 1.day if in_route_time < date
     arrived_time += 1.day if arrived_time < date

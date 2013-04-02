@@ -12,13 +12,24 @@ describe RunsController do
 
   describe "new" do
     it "should render 'new', return response of 200" do
+      sign_in Fabricate(:user, role: :chief)
       get :new
       response.should be_success
       response.should render_template(:new)
     end
+
+    it "should redirect to root" do
+      get :new
+      response.should be_redirect
+      response.should redirect_to new_user_session_path
+    end
   end
 
   describe "create" do
+    before(:each) do
+      sign_in Fabricate(:user, role: :chief)
+    end
+
     it "should render 'new', return response of 200, create a new run" do
       new_run_str = "2/13/13	25				1			0:57	5	0:05	0:09	16:21	16:26	16:30	17:18"
 
@@ -90,6 +101,21 @@ describe RunsController do
       response.should render_template(:new)
       flash[:notice].should == "Run added"
       flash[:error].should == nil
+    end
+
+    it "should deal with a four digit year" do
+      new_run_str = "4/1/2013	47				1			0:20	8	0:04	0:11	6:28	6:32	6:39	6:48"
+
+      Run.all.length.should == 0
+      post :create, excel_str: new_run_str
+      run = Run.all
+      run.length.should == 1
+      run[0].alarm_number.should == 47
+      run[0].date.should == DateTime.parse('2013/04/01 06:28:00')
+
+      response.should be_success
+      response.should render_template(:new)
+      flash[:notice].should == "Run added"
     end
   end
 end
