@@ -14,7 +14,7 @@ class RunsController < ApplicationController
     run_array = params[:excel_str].split
 
     if run_array.length != EXCEL_ROWS
-      flash.now[:error] = "Run was not added. You seem to be missing some data. There needs to be #{EXCEL_ROWS} pieces of data."
+      flash.now[:alert] = "Run was not added. You seem to be missing some data. There needs to be #{EXCEL_ROWS} pieces of data."
       render :new
       return
     end
@@ -32,8 +32,8 @@ class RunsController < ApplicationController
     if run.save
       flash.now[:notice] = "Run added"
     else
-      flash.now[:error] = "Run was not added"
-      flash.now[:error] = "Couldn't match the type of run with string" if type.nil?
+      flash.now[:alert] = "Run was not added"
+      flash.now[:alert] = "Couldn't match the type of run with string" if type.nil?
     end
 
     render :new

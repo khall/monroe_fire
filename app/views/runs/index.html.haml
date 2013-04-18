@@ -3,6 +3,8 @@
     text-align: center;
   }
 
+=# link_to "Add Run", new_run_path if can? :create, @runs
+
 - day_data = day_stats
 %p= "Day of the week most likely to have calls: #{day_data[:most]}"
 %p= "Day of the week least likely to have calls: #{day_data[:least]}"
@@ -10,7 +12,7 @@
 %p= "Hour of day most likely to have calls: #{hour_data[:most]}"
 %p= "Hour of day least likely to have calls: #{hour_data[:least]}"
 
-%table
+%table{cellspacing: 0}
   %thead
     %th Date
     %th Alarm #
@@ -24,8 +26,10 @@
     %th First arrived
     %th In quarters
   %tbody
+    - even = true
     - @runs.each do |run|
-      %tr
+      - even = !even
+      %tr{class: even ? "even_row": ""}
         %td= run.date.strftime('%D')
         %td= run.alarm_number
         %td= run.run_type.humanize
