@@ -29,4 +29,18 @@ describe RunHelper do
       list.should == {0 => 0, 1 => 0, 2 => 0, 3 => 0, 4 => 2, 5 => 2, 6 => 0}
     end
   end
+
+  describe "chart" do
+    it "should draw a blank chart" do
+      data = {monday: 0, tuesday: 0, wednesday: 0, thursday: 0, friday: 0, saturday: 0, sunday: 0}
+      html = helper.chart(data)
+      html.should =~ //
+    end
+
+    it "should draw a regular chart " do
+      data = {monday: 5, tuesday: 4, wednesday: 8, thursday: 0, friday: 2, saturday: 4, sunday: 1}
+      html = helper.chart(data)
+      html.should =~ //
+    end
+  end
 end

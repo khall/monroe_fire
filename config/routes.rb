@@ -1,7 +1,10 @@
 Fire::Application.routes.draw do
-  resources :runs do
+  devise_for :users, controllers: {sessions: "users/sessions"}
 
+  resources :runs do
   end
+
+  match 'users/signup' => 'users#signup'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -51,7 +54,7 @@ Fire::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  #root :to => 'home#index'
+  root :to => 'home#index'
 
   # See how all your routes lay out with "rake routes"
 
