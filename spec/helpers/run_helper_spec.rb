@@ -18,7 +18,7 @@ describe RunHelper do
   describe "fill_in_missing" do
     it "should fill in missing values in hash with zeros" do
       list = helper.fill_in_missing({4 => 4, 5 => 2}, 6)
-      list.should == {0 => 0, 1 => 0, 2 => 0, 3 => 0, 4 => 2, 5 => 2, 6 => 0}
+      list.should == {0 => 0, 1 => 0, 2 => 0, 3 => 0, 4 => 4, 5 => 2, 6 => 0}
     end
 
     it "should fill in missing values in Hash.new(0) with zeros" do

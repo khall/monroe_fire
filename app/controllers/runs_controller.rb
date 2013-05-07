@@ -21,15 +21,15 @@ class RunsController < ApplicationController
 
     type = get_run_type(params[:excel_str])
 
-    run = Run.new
-    set_dates(run, run_array)
+    @run = Run.new
+    set_dates(@run, run_array)
 
-    run.alarm_number = run_array[1]
-    run.run_type = type
-    run.number_of_responders = run_array[4]
-    run.time_out = run_array[3]
+    @run.alarm_number = run_array[1]
+    @run.run_type = type
+    @run.number_of_responders = run_array[4]
+    @run.time_out = run_array[3]
 
-    if run.save
+    if @run.save
       flash.now[:notice] = "Run added"
     else
       flash.now[:alert] = "Run was not added"

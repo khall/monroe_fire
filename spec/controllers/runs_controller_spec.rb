@@ -12,23 +12,23 @@ describe RunsController do
 
   describe "new" do
     it "should render 'new', return response of 200" do
-      sign_in Fabricate(:user, role: :chief)
+      #sign_in Fabricate(:user, role: :chief)
       get :new
       response.should be_success
       response.should render_template(:new)
     end
 
-    it "should redirect to root" do
-      get :new
-      response.should be_redirect
-      response.should redirect_to new_user_session_path
-    end
+    #it "should redirect to root" do
+    #  get :new
+    #  response.should be_redirect
+    #  response.should redirect_to new_user_session_path
+    #end
   end
 
   describe "create" do
-    before(:each) do
-      sign_in Fabricate(:user, role: :chief)
-    end
+    #before(:each) do
+    #  sign_in Fabricate(:user, role: :chief)
+    #end
 
     it "should render 'new', return response of 200, create a new run" do
       new_run_str = "2/13/13	25				1			0:57	5	0:05	0:09	16:21	16:26	16:30	17:18"
@@ -45,9 +45,9 @@ describe RunsController do
       flash[:notice].should == "Run added"
     end
 
-    it "should not create a new run since the run number has been used" do
-      new_run_str = "2/13/13	25				1			0:57	5	0:05	0:09	16:21	16:26	16:30	17:18"
-      existing_run = Fabricate(:run, alarm_number: 25)
+    it "should not create a new run since the run number has been used in the same year" do
+      new_run_str = "2/13/13	29				1			0:57	5	0:05	0:09	16:21	16:26	16:30	17:18"
+      existing_run = Fabricate(:run, alarm_number: 29, date: DateTime.parse('2013/05/05 17:00:00'))
 
       runs = Run.all
       runs.length.should == 1
@@ -59,7 +59,25 @@ describe RunsController do
 
       response.should be_success
       response.should render_template(:new)
-      flash[:error].should == "Run was not added"
+      flash[:alert].should == "Run was not added"
+    end
+
+    it "should create a new run since the run number has been used, but in a different year" do
+      new_run_str = "2/13/13	25				1			0:57	5	0:05	0:09	16:21	16:26	16:30	17:18"
+      existing_run = Fabricate(:run, alarm_number: 25, date: DateTime.parse('2012/05/05 17:00:00'))
+
+      runs = Run.all
+      runs.length.should == 1
+      runs[0].date.should == existing_run.date
+      post :create, excel_str: new_run_str
+      runs = Run.all
+      runs.length.should == 2
+      runs[0].date.should == existing_run.date
+      runs[1].date.should == DateTime.parse('2013/02/13 16:21:00')
+
+      response.should be_success
+      response.should render_template(:new)
+      flash[:notice].should == "Run added"
     end
 
     it "should not create a new run since the string is missing a field" do
@@ -71,7 +89,7 @@ describe RunsController do
 
       response.should be_success
       response.should render_template(:new)
-      flash[:error].should == "Run was not added. You seem to be missing some data. There needs to be 11 pieces of data."
+      flash[:alert].should == "Run was not added. You seem to be missing some data. There needs to be 11 pieces of data."
     end
 
     it "should not create a new run since there is no type" do
@@ -83,7 +101,7 @@ describe RunsController do
 
       response.should be_success
       response.should render_template(:new)
-      flash[:error].should == "Couldn't match the type of run with string"
+      flash[:alert].should == "Couldn't match the type of run with string"
     end
 
     it "should create a new run that deals with the day changing" do
@@ -100,7 +118,7 @@ describe RunsController do
       response.should be_success
       response.should render_template(:new)
       flash[:notice].should == "Run added"
-      flash[:error].should == nil
+      flash[:alert].should == nil
     end
 
     it "should deal with a four digit year" do
@@ -116,20 +134,6 @@ describe RunsController do
       response.should be_success
       response.should render_template(:new)
       flash[:notice].should == "Run added"
-    end
-
-
-    it "should not add a run that's in the past, but should provide a useful error message" do
-      new_run_str = "5/3/2012	69		1					0:30	5	0:02	0:07	15:00	15:02	15:07	15:30"
-
-      Run.all.length.should == 0
-      post :create, excel_str: new_run_str
-      run = Run.all
-      run.length.should == 0
-
-      response.should be_success
-      response.should render_template(:new)
-      flash[:notice].should == "The date for this run appears to have a date that is likely incorrect, so no run was created."
     end
   end
 end
