@@ -7,7 +7,7 @@ gem 'haml'
 gem 'rails', '3.2.12'
 gem 'thin'
 gem 'unicorn'
-gem 'rmagick'
+#gem 'rmagick'
 
 gem 'execjs'
 gem 'therubyracer'
@@ -35,11 +35,14 @@ end
 
 gem 'jquery-rails'
 
-#group :test do
-#  gem 'autotest'
-#  gem 'autotest-fsevent'
-#  gem 'rspec-rails'
-#end
+group :test do
+  gem 'autotest-standalone'
+  gem 'autotest-fsevent'
+  gem 'autotest-rails'
+  gem 'fabrication'
+  gem 'rspec'
+  gem 'rspec-rails'
+end
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

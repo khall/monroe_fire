@@ -117,5 +117,19 @@ describe RunsController do
       response.should render_template(:new)
       flash[:notice].should == "Run added"
     end
+
+
+    it "should not add a run that's in the past, but should provide a useful error message" do
+      new_run_str = "5/3/2012	69		1					0:30	5	0:02	0:07	15:00	15:02	15:07	15:30"
+
+      Run.all.length.should == 0
+      post :create, excel_str: new_run_str
+      run = Run.all
+      run.length.should == 0
+
+      response.should be_success
+      response.should render_template(:new)
+      flash[:notice].should == "The date for this run appears to have a date that is likely incorrect, so no run was created."
+    end
   end
 end
