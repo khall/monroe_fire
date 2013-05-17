@@ -36,7 +36,7 @@ end
 gem 'jquery-rails'
 
 group :test do
-  gem 'autotest'
+  gem 'autotest-standalone'
   gem 'autotest-fsevent'
   gem 'fabrication'
   gem 'faker'
@@ -51,3 +51,8 @@ end
 
 # Deploy with Capistrano
 # gem 'capistrano'
+
+group :test, :development do
+  # To use debugger
+  gem 'debugger'
+end

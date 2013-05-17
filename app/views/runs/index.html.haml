@@ -3,7 +3,7 @@
     text-align: center;
   }
 
-=# link_to "Add Run", new_run_path if can? :create, @runs
+= link_to "Add Run", new_run_path if can? :create, @runs
 
 - day_data = day_stats
 %p= "Day of the week most likely to have calls: #{day_data[:most]}"

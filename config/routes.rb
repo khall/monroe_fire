@@ -1,10 +1,9 @@
 Fire::Application.routes.draw do
-  devise_for :users, controllers: {sessions: "users/sessions"}
+  devise_for :users
 
   resources :runs do
   end
 
-  match 'users/signup' => 'users#signup'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

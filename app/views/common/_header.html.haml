@@ -20,3 +20,9 @@
       %li Links
     = link_to "/training/benton-county-clinical-guidelines-and-procedures" do
       %li Clinical Guidelines
+    - if user_signed_in?
+      = link_to destroy_user_session_path, method: :delete do
+        %li Logout
+    - else
+      = link_to new_user_session_path do
+        %li Login
