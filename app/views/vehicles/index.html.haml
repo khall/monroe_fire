@@ -1,0 +1,6 @@
+- if @vehicles.blank?
+  No vehicles found
+-else
+  %ul
+    - @vehicles.each do |v|
+      %li= link_to v.name, vehicle_path(v)

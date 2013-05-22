@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_surveys
+
   ROLES = %w|firefighter chief webmaster|
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,

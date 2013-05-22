@@ -1,0 +1,16 @@
+%h3= @vehicle.name
+
+- @vehicle.compartments.each do |c|
+  = c.description
+  %table
+    %thead
+      %tr
+        %th Tool
+        %th Use
+        %th Quantity
+    %tbody
+      - c.tools.each do |t|
+        %tr
+          %td= t.name
+          %td= t.use
+          %td= t.quantity

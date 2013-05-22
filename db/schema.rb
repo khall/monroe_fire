@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130329053838) do
+ActiveRecord::Schema.define(:version => 20130521233226) do
 
   create_table "cms_blocks", :force => true do |t|
     t.integer  "page_id",    :null => false
@@ -130,6 +130,13 @@ ActiveRecord::Schema.define(:version => 20130329053838) do
   add_index "cms_snippets", ["site_id", "identifier"], :name => "index_cms_snippets_on_site_id_and_identifier", :unique => true
   add_index "cms_snippets", ["site_id", "position"], :name => "index_cms_snippets_on_site_id_and_position"
 
+  create_table "compartments", :force => true do |t|
+    t.integer  "vehicle_id"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
   create_table "runs", :force => true do |t|
     t.datetime "date"
     t.integer  "alarm_number"
@@ -141,6 +148,58 @@ ActiveRecord::Schema.define(:version => 20130329053838) do
     t.datetime "in_quarters_time"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
+  end
+
+  create_table "survey_answers", :force => true do |t|
+    t.integer  "attempt_id"
+    t.integer  "question_id"
+    t.integer  "option_id"
+    t.boolean  "correct"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "survey_attempts", :force => true do |t|
+    t.integer "participant_id"
+    t.string  "participant_type"
+    t.integer "survey_id"
+    t.boolean "winner"
+    t.integer "score"
+  end
+
+  create_table "survey_options", :force => true do |t|
+    t.integer  "question_id"
+    t.integer  "weight",      :default => 0
+    t.string   "text"
+    t.boolean  "correct"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+  end
+
+  create_table "survey_questions", :force => true do |t|
+    t.integer  "survey_id"
+    t.string   "text"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "survey_surveys", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "attempts_number", :default => 0
+    t.boolean  "finished",        :default => false
+    t.boolean  "active",          :default => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+  end
+
+  create_table "tools", :force => true do |t|
+    t.integer  "compartment_id"
+    t.string   "name"
+    t.string   "use"
+    t.integer  "quantity"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "users", :force => true do |t|
@@ -161,5 +220,11 @@ ActiveRecord::Schema.define(:version => 20130329053838) do
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+
+  create_table "vehicles", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
 end
