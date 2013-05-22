@@ -1,9 +1,9 @@
 Fire::Application.routes.draw do
   devise_for :users
 
-  resources :vehicles, only: [:index, :show]
-
   resources :runs, only: [:index, :new, :create]
+  resources :tools, only: [:index, :show]
+  resources :vehicles, only: [:index, :show]
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
