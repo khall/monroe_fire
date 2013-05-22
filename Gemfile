@@ -8,15 +8,13 @@ gem 'rails', '3.2.12'
 gem 'thin'
 gem 'unicorn'
 #gem 'rmagick'
+gem 'survey', :git => 'git://github.com/runtimerevolution/survey.git'
 
 gem 'execjs'
 gem 'therubyracer'
 
 # CMS
 gem 'comfortable_mexican_sofa'
-
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'pg'
 

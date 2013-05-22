@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/runtimerevolution/survey.git
+  revision: 1d4f603b8de779667a23779c33853b9d5ad53357
+  specs:
+    survey (0.1)
+      rails
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -208,6 +215,7 @@ DEPENDENCIES
   rails (= 3.2.12)
   rspec-rails
   sass-rails (~> 3.2.3)
+  survey!
   therubyracer
   thin
   uglifier (>= 1.0.3)
