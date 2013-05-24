@@ -129,4 +129,29 @@ describe ToolsController do
       end
     end
   end
+
+  describe "edit" do
+    describe "when logged in" do
+      before :each do
+        sign_in Fabricate(:user, role: :webmaster)
+      end
+
+      it "should render 'edit', return response of 200" do
+        t = Fabricate(:tool)
+        get :edit, id: t.id
+        response.should be_success
+        response.should render_template(:edit)
+        assigns[:tool].should == t
+      end
+    end
+
+    describe "when logged out" do
+      it "should redirect to the login page" do
+        t = Fabricate(:tool)
+        get :edit, id: t.id
+        response.should be_redirect
+        response.should redirect_to new_user_session_path
+      end
+    end
+  end
 end

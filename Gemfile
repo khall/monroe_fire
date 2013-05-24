@@ -8,6 +8,7 @@ gem 'rails', '3.2.12'
 gem 'thin'
 gem 'unicorn'
 #gem 'rmagick'
+gem 'simple_form'
 gem 'survey', :git => 'git://github.com/runtimerevolution/survey.git'
 
 gem 'execjs'
