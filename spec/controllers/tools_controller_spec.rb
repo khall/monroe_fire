@@ -153,5 +153,52 @@ describe ToolsController do
         response.should redirect_to new_user_session_path
       end
     end
+
+    describe "when logged in as a firefighter" do
+      it "should redirect to the home page with a flash message saying the user lacks permission to edit" do
+        sign_in Fabricate(:user, role: :firefighter)
+        t = Fabricate(:tool)
+        get :edit, id: t.id
+        response.should be_redirect
+        response.should redirect_to root_path
+        flash[:alert].should == "You are not authorized to access this page."
+      end
+    end
+  end
+
+  describe "update" do
+    describe "when logged in" do
+      before :each do
+        sign_in Fabricate(:user, role: :webmaster)
+      end
+
+      it "should render 'edit', return response of 200" do
+        t = Fabricate(:tool, name: "bad name")
+        put :update, id: t.id, tool: {name: "good name"}
+        response.should be_redirect
+        response.should redirect_to edit_tool_path
+        assigns[:tool].name.should == "good name"
+      end
+    end
+
+    describe "when logged out" do
+      it "should redirect to the login page" do
+        t = Fabricate(:tool)
+        put :update, id: t.id
+        response.should be_redirect
+        response.should redirect_to new_user_session_path
+      end
+    end
+
+    describe "when logged in as a firefighter" do
+      it "should redirect to the home page with a flash message saying the user lacks permission to edit" do
+        sign_in Fabricate(:user, role: :firefighter)
+        t = Fabricate(:tool)
+        put :update, id: t.id
+        response.should be_redirect
+        response.should redirect_to root_path
+        flash[:alert].should == "You are not authorized to access this page."
+      end
+    end
   end
 end

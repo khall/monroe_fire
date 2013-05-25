@@ -17,4 +17,14 @@ class ToolsController < ApplicationController
 
   def edit
   end
+
+  def update
+    @tool = Tool.find(params[:id])
+    if @tool.update_attributes(params[:tool])
+      flash.now[:notice] = "Tool updated"
+    else
+      flash.now[:alert] = "Tool not updated"
+    end
+    redirect_to edit_tool_path, id: @tool.id
+  end
 end
