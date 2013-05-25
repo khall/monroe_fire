@@ -1,0 +1,10 @@
+%table
+  %thead
+    %tr
+      %th Vehicle
+      %th Compartment
+  %tbody
+    - @compartments.each do |compartment|
+      %tr
+        %td= compartment.vehicle.name
+        %td= compartment.description
