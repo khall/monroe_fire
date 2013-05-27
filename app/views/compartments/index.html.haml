@@ -7,4 +7,4 @@
     - @compartments.each do |compartment|
       %tr
         %td= compartment.vehicle.name
-        %td= compartment.description
+        %td= link_to compartment.description, edit_compartment_path(id: compartment.id)

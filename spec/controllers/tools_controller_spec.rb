@@ -201,4 +201,110 @@ describe ToolsController do
       end
     end
   end
+
+  describe "quiz" do
+    describe "when logged in" do
+      before :each do
+        sign_in Fabricate(:user, role: :firefighter)
+        v = Fabricate(:vehicle)
+        @compartments = [Fabricate(:compartment, vehicle: v),
+                         Fabricate(:compartment, vehicle: v),
+                         Fabricate(:compartment, vehicle: v),
+                         Fabricate(:compartment, vehicle: v)
+        ]
+      end
+
+      it "should render 'quiz', return response of 200" do
+        t = Fabricate(:tool, compartment: @compartments[0])
+        get :quiz
+        response.should be_success
+        response.should render_template(:quiz)
+        assigns[:tool].name.should == t.name
+        assigns[:compartments].class.should == ActiveRecord::Relation
+        @compartments.each do |c|
+          assigns[:compartments].include?(c).should == true
+        end
+        assigns[:compartments].size.should == ANSWER_CHOICES
+      end
+
+      it "should render 'quiz', randomly pick a tool, return response of 200" do
+        tools = [Fabricate(:tool, compartment: @compartments[rand(@compartments.length)]),
+                 Fabricate(:tool, compartment: @compartments[rand(@compartments.length)]),
+                 Fabricate(:tool, compartment: @compartments[rand(@compartments.length)]),
+                 Fabricate(:tool, compartment: @compartments[rand(@compartments.length)]),
+                 Fabricate(:tool, compartment: @compartments[rand(@compartments.length)]),
+                 Fabricate(:tool, compartment: @compartments[rand(@compartments.length)])
+        ]
+        get :quiz
+        response.should be_success
+        response.should render_template(:quiz)
+        tools.map(&:name).include?(assigns[:tool].name).should ==  true
+        assigns[:compartments].class.should == ActiveRecord::Relation
+        @compartments.each do |c|
+          assigns[:compartments].include?(c).should == true
+        end
+        assigns[:compartments].size.should == ANSWER_CHOICES
+      end
+    end
+
+    describe "when logged out" do
+      it "should redirect to the login page" do
+        get :quiz
+        response.should be_redirect
+        response.should redirect_to new_user_session_path
+      end
+    end
+  end
+
+  describe "quiz_answer" do
+    describe "when logged in" do
+      before :each do
+        sign_in Fabricate(:user, role: :firefighter)
+      end
+
+      it "answered correctly, should increment correct results, get a new tool, render 'quiz_answer', return response of 200" do
+        t = Fabricate(:tool)
+        put :quiz_answer, id: t.id, answer: t.compartment.id, results: {questions: 0, correct: 0}
+        response.should be_success
+        response.should render_template(:quiz)
+        assigns[:tool].name.should == t.name
+        assigns[:results][:questions].should == 1
+        assigns[:results][:right].should == 1
+      end
+
+      it "answered incorrectly, should increment questions but not correct results, get a new tool, render 'quiz_answer', return response of 200" do
+        t = Fabricate(:tool)
+        put :quiz_answer, id: t.id, answer: 0, results: {questions: 0, correct: 0}
+        response.should be_success
+        response.should render_template(:quiz)
+        assigns[:tool].name.should == t.name
+        assigns[:results][:questions].should == 1
+        assigns[:results][:right].should == 0
+      end
+
+      it "multiple tools, should render 'quiz_answer', randomly pick a tool, return response of 200" do
+        tools = [Fabricate(:tool),
+                 Fabricate(:tool),
+                 Fabricate(:tool),
+                 Fabricate(:tool),
+                 Fabricate(:tool),
+                 Fabricate(:tool)
+        ]
+        put :quiz_answer, id: tools[0].id, answer: tools[0].compartment.id, results: {questions: 0, correct: 0}
+        response.should be_success
+        response.should render_template(:quiz)
+        tools.map(&:name).include?(assigns[:tool].name).should ==  true
+        assigns[:results][:questions].should == 1
+        assigns[:results][:right].should == 1
+      end
+    end
+
+    describe "when logged out" do
+      it "should redirect to the login page" do
+        put :quiz_answer
+        response.should be_redirect
+        response.should redirect_to new_user_session_path
+      end
+    end
+  end
 end

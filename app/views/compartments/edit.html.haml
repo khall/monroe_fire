@@ -1,3 +1,10 @@
+%p= link_to "Return to compartments list", compartments_path
+
+Items in this compartment:
+%ul
+  - @compartment.tools.each do |t|
+    %li= t.name
+
 = simple_form_for @compartment do |f|
   = f.input :description
   = f.button :submit

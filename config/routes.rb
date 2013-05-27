@@ -3,7 +3,12 @@ Fire::Application.routes.draw do
 
   resources :compartments, only: [:index, :edit, :update]
   resources :runs, only: [:index, :new, :create]
-  resources :tools, only: [:index, :show, :edit, :update]
+  resources :tools, only: [:index, :show, :edit, :update] do
+    collection do
+      get :quiz
+      put :quiz_answer
+    end
+  end
   resources :vehicles, only: [:index, :show]
 
   # The priority is based upon order of creation:

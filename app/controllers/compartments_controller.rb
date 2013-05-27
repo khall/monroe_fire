@@ -1,9 +1,10 @@
 class CompartmentsController < ApplicationController
   before_filter :authenticate_user!
-  load_resource only: [:index, :edit]
+  load_resource only: [:edit]
   authorize_resource
 
   def index
+    @compartments = Compartment.includes(:vehicle).order('vehicles.name, compartments.description')
   end
 
   def edit
@@ -11,10 +12,11 @@ class CompartmentsController < ApplicationController
 
   def update
     @compartment = Compartment.find(params[:id])
+    @compartment.description = @compartment.description.strip
     if @compartment.update_attributes(params[:compartment])
-      flash.now[:notice] = "Compartment updated"
+      flash[:notice] = "Compartment updated"
     else
-      flash.now[:alert] = "Compartment not updated"
+      flash[:alert] = "Compartment not updated"
     end
     redirect_to edit_compartment_path, id: @compartment.id
   end

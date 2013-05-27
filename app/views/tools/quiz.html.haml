@@ -1,0 +1,12 @@
+#results
+  = "Questions: #{@results[:questions]}"
+  = "Correct: #{@results[:right]}"
+  - percent = @results[:questions].to_f == 0 ? 0 : (@results[:right].to_f / @results[:questions].to_f) * 100
+  = "Percentage: #{percent.to_i}%"
+
+#question
+  = "Where is the #{@tool.name} on #{@tool.vehicle.name}?"
+
+%ul#answers
+  - @compartments.each do |c|
+    %li= link_to c.description, quiz_answer_tools_path(id: @tool.id, answer: c.id, results: {questions: @results[:questions], right: @results[:right]}), method: :put

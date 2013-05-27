@@ -69,6 +69,7 @@ describe CompartmentsController do
         response.should be_redirect
         response.should redirect_to edit_compartment_path
         assigns[:compartment].description.should == "good description"
+        flash[:notice].should == "Compartment updated"
       end
     end
 
