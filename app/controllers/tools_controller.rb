@@ -5,10 +5,10 @@ class ToolsController < ApplicationController
 
   def index
     @tools = if params[:search].blank?
-      Tool.all
+      Tool.all.order('vehicles.name, compartments.description, tools.name')
     else
       #Tool.all(conditions: ["name like ? or use like ?", "%#{params[:search]}%", "%#{params[:search]}%"])
-      Tool.all(conditions: ["lower(name) like ?", "%#{params[:search].downcase}%"])
+      Tool.all(conditions: ["lower(name) like ?", "%#{params[:search].downcase}%"]).order('vehicles.name, compartments.description, tools.name')
     end
   end
 
