@@ -288,14 +288,16 @@ describe ToolsController do
         assigns[:results][:right].should == 1
       end
 
-      it "answered incorrectly, should increment questions but not correct results, get a new tool, render 'quiz_answer', return response of 200" do
+      it "answered incorrectly, should increment questions but not correct results, provide the correct answer" do
         t = Fabricate(:tool)
-        put :quiz_answer, id: t.id, answer: 0, results: {questions: 0, correct: 0}
+        c = Fabricate(:compartment)
+        put :quiz_answer, id: t.id, answer: c.id, results: {questions: 0, correct: 0}
         response.should be_success
         response.should render_template(:quiz)
         assigns[:tool].name.should == t.name
         assigns[:results][:questions].should == 1
         assigns[:results][:right].should == 0
+        flash[:notice].should == "The #{t.name} is located in the #{t.compartment.description} on #{t.vehicle.name}"
       end
 
       it "multiple tools, should render 'quiz_answer', randomly pick a tool, return response of 200" do
