@@ -49,6 +49,15 @@ class ToolsController < ApplicationController
   def prepare_question
     @tool = Tool.offset(rand(Tool.count)).limit(1).first
     @compartments = Compartment.where(vehicle_id: @tool.vehicle.id).order("random()").limit(ANSWER_CHOICES)
+    # prevent duplicate compartments if the randomly selected one is the answer
+    answer_index = @compartments.index(@tool.compartment)
+    if answer_index
+      @compartments[answer_index] = @tool.compartment
+    else
+      @compartments.pop
+      @compartments << @tool.compartment
+    end
+    @compartments.shuffle!
     @results = {questions: 0, right: 0}
   end
 end

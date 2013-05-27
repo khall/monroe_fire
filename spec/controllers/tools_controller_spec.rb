@@ -206,11 +206,11 @@ describe ToolsController do
     describe "when logged in" do
       before :each do
         sign_in Fabricate(:user, role: :firefighter)
-        v = Fabricate(:vehicle)
-        @compartments = [Fabricate(:compartment, vehicle: v),
-                         Fabricate(:compartment, vehicle: v),
-                         Fabricate(:compartment, vehicle: v),
-                         Fabricate(:compartment, vehicle: v)
+        @vehicle = Fabricate(:vehicle)
+        @compartments = [Fabricate(:compartment, vehicle: @vehicle),
+                         Fabricate(:compartment, vehicle: @vehicle),
+                         Fabricate(:compartment, vehicle: @vehicle),
+                         Fabricate(:compartment, vehicle: @vehicle)
         ]
       end
 
@@ -221,13 +221,14 @@ describe ToolsController do
         response.should render_template(:quiz)
         assigns[:tool].name.should == t.name
         assigns[:compartments].class.should == ActiveRecord::Relation
+        assigns[:compartments].map(&:id).uniq.length.should == ANSWER_CHOICES
         @compartments.each do |c|
           assigns[:compartments].include?(c).should == true
         end
         assigns[:compartments].size.should == ANSWER_CHOICES
       end
 
-      it "should render 'quiz', randomly pick a tool, return response of 200" do
+      it "should randomly pick a tool but only return unique compartments" do
         tools = [Fabricate(:tool, compartment: @compartments[rand(@compartments.length)]),
                  Fabricate(:tool, compartment: @compartments[rand(@compartments.length)]),
                  Fabricate(:tool, compartment: @compartments[rand(@compartments.length)]),
@@ -240,9 +241,24 @@ describe ToolsController do
         response.should render_template(:quiz)
         tools.map(&:name).include?(assigns[:tool].name).should ==  true
         assigns[:compartments].class.should == ActiveRecord::Relation
+        assigns[:compartments].map(&:id).uniq.length.should == ANSWER_CHOICES
         @compartments.each do |c|
           assigns[:compartments].include?(c).should == true
         end
+        assigns[:compartments].size.should == ANSWER_CHOICES
+      end
+
+      it "should pick a tool and always get the compartment the tool is in" do
+        100.times do
+          Fabricate(:compartment, vehicle: @vehicle)
+        end
+        t = Fabricate(:tool, compartment: @compartments[3])
+        get :quiz
+        response.should be_success
+        response.should render_template(:quiz)
+        assigns[:tool].name.should == t.name
+        assigns[:compartments].include?(assigns[:tool].compartment).should == true
+        assigns[:compartments].class.should == ActiveRecord::Relation
         assigns[:compartments].size.should == ANSWER_CHOICES
       end
     end
