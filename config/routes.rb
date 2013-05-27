@@ -9,6 +9,7 @@ Fire::Application.routes.draw do
       put :quiz_answer
     end
   end
+  resources :users, only: [:index]
   resources :vehicles, only: [:index, :show]
 
   # The priority is based upon order of creation:

@@ -17,7 +17,7 @@ describe "tools/quiz" do
       rendered.should =~ /Where is the #{tool.name} on #{tool.vehicle.name}\?/
       rendered.should =~ /Questions: 0/
       rendered.should =~ /Correct: 0/
-      rendered.should =~ /Percentage: n\/a/
+      rendered.should =~ /Percentage: 0%/
     end
 
     it "renders a quiz question about a tool" do
@@ -35,7 +35,7 @@ describe "tools/quiz" do
       rendered.should =~ /Where is the #{tool.name} on #{tool.vehicle.name}\?/
       rendered.should =~ /Questions: 5/
       rendered.should =~ /Correct: 3/
-      rendered.should =~ /Percentage: 60/
+      rendered.should =~ /Percentage: 60%/
     end
   end
 end
