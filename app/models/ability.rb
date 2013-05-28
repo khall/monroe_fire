@@ -39,7 +39,9 @@ class Ability
       can :create, User
     else # not logged in
       can :read, :all
-      #cannot :read, Training
+      cannot :read, Tool
+      cannot :read, Compartment
+      cannot :read, Vehicle
     end
   end
 end

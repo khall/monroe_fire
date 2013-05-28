@@ -41,8 +41,9 @@ class ToolsController < ApplicationController
     old_tool = Tool.find(params[:id])
     if old_tool.compartment == Compartment.find(params[:answer])
       @results[:right] += 1
+      flash.now[:notice] = "Correct!"
     else
-      flash.now[:notice] = "The #{old_tool.name} is located in the #{old_tool.compartment.description} on #{old_tool.vehicle.name}"
+      flash.now[:alert] = "The #{old_tool.name} is located in the #{old_tool.compartment.description} on #{old_tool.vehicle.name}"
     end
     render :quiz
   end
