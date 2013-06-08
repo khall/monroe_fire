@@ -36,4 +36,39 @@ describe User do
       u.chief?.should == false
     end
   end
+
+  describe "tool_quiz_percentage" do
+    it "should return 50 for 1 right 1 wrong" do
+      u = Fabricate(:user, role: 'firefighter')
+      Fabricate(:answer, user: u, question_type: "tool_quiz", correct: true)
+      Fabricate(:answer, user: u, question_type: "tool_quiz", correct: false)
+      u.tool_quiz_percentage.should == 50
+    end
+
+    it "should return 100 for 1 right answer, ignoring other user's answers" do
+      u = Fabricate(:user, role: 'firefighter')
+      other_user = Fabricate(:user, role: 'firefighter')
+      Fabricate(:answer, user: u, question_type: "tool_quiz", correct: true)
+      Fabricate(:answer, user: other_user, question_type: "tool_quiz", correct: false)
+      u.tool_quiz_percentage.should == 100
+    end
+  end
+
+  describe "tool_quiz_correct" do
+    it "should return 2 for2 right 1 wrong" do
+      u = Fabricate(:user, role: 'firefighter')
+      Fabricate(:answer, user: u, question_type: "tool_quiz", correct: true)
+      Fabricate(:answer, user: u, question_type: "tool_quiz", correct: true)
+      Fabricate(:answer, user: u, question_type: "tool_quiz", correct: false)
+      u.tool_quiz_correct.should == 2
+    end
+
+    it "should return 1 for 1 right answer, ignoring other user's answers" do
+      u = Fabricate(:user, role: 'firefighter')
+      other_user = Fabricate(:user, role: 'firefighter')
+      Fabricate(:answer, user: u, question_type: "tool_quiz", correct: true)
+      Fabricate(:answer, user: other_user, question_type: "tool_quiz", correct: false)
+      u.tool_quiz_correct.should == 1
+    end
+  end
 end

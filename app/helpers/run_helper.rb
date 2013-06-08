@@ -11,13 +11,14 @@ module RunHelper
   def day_stats
     days_of_week = %w|Sunday Monday Tuesday Wednesday Thursday Friday Saturday|
     weekdays = @runs.map{|r| r.date.wday}
-    sorted_popularity = weekdays.inject(Hash.new(0)) do |sum_arr, day|
+    popularity = weekdays.inject(Hash.new(0)) do |sum_arr, day|
       sum_arr[day] += 1
       sum_arr
     end
 
-    sorted_popularity = fill_in_missing(sorted_popularity, 6)
-    sorted_popularity = sorted_popularity.sort_by{|day| day[1]}
+    popularity = fill_in_missing(popularity, 6)
+    @unsorted_day_stats = popularity.sort_by{|day| day[0]}.map{|k,v| {num: v, name: days_of_week[k]}}
+    sorted_popularity = popularity.sort_by{|day| day[1]}
     most_popular_days = sorted_popularity.select{|day| day[1] == sorted_popularity.last[1]}.sort
     least_popular_days = sorted_popularity.select{|day| day[1] == sorted_popularity.first[1]}.sort
 
@@ -29,13 +30,14 @@ module RunHelper
 
   def hour_stats
     weekdays = @runs.map{|r| r.date.hour}
-    sorted_popularity = weekdays.inject(Hash.new(0)) do |sum_arr, hour|
+    popularity = weekdays.inject(Hash.new(0)) do |sum_arr, hour|
       sum_arr[hour] += 1
       sum_arr
     end
 
-    sorted_popularity = fill_in_missing(sorted_popularity, 23)
-    sorted_popularity = sorted_popularity.sort_by{|hour| hour[1]}
+    popularity = fill_in_missing(popularity, 23)
+    @unsorted_hour_stats = popularity.sort_by{|day| day[0]}.map{|k,v| {num: v, name: k}}
+    sorted_popularity = popularity.sort_by{|hour| hour[1]}
     most_popular_hours = sorted_popularity.select{|hour_data| hour_data[1] == sorted_popularity.last[1]}.sort
     least_popular_hours = sorted_popularity.select{|hour_data| hour_data[1] == sorted_popularity.first[1]}.sort
 

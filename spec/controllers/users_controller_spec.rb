@@ -23,6 +23,16 @@ describe UsersController do
         response.should render_template(:index)
         assigns[:users].length.should == 3
       end
+
+      it "should give quiz results for all users" do
+        Fabricate(:answer, user: @user, question_type: "tool_quiz", correct: true)
+        Fabricate(:answer, user: @user, question_type: "tool_quiz", correct: false)
+        get :index
+        response.should be_success
+        response.should render_template(:index)
+        assigns[:users].length.should == 1
+        assigns[:users][0].tool_quiz_percentage.should == 50
+      end
     end
 
     describe "when not logged in" do

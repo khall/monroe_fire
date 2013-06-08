@@ -286,6 +286,7 @@ describe ToolsController do
         assigns[:tool].name.should == t.name
         assigns[:results][:questions].should == 1
         assigns[:results][:right].should == 1
+        flash[:notice].should == "Correct!"
       end
 
       it "answered incorrectly, should increment questions but not correct results, provide the correct answer" do
@@ -297,7 +298,7 @@ describe ToolsController do
         assigns[:tool].name.should == t.name
         assigns[:results][:questions].should == 1
         assigns[:results][:right].should == 0
-        flash[:notice].should == "The #{t.name} is located in the #{t.compartment.description} on #{t.vehicle.name}"
+        flash[:alert].should == "The #{t.name} is located in the #{t.compartment.description} on #{t.vehicle.name}"
       end
 
       it "multiple tools, should render 'quiz_answer', randomly pick a tool, return response of 200" do
@@ -314,6 +315,7 @@ describe ToolsController do
         tools.map(&:name).include?(assigns[:tool].name).should ==  true
         assigns[:results][:questions].should == 1
         assigns[:results][:right].should == 1
+        flash[:notice].should == "Correct!"
       end
     end
 

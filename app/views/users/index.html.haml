@@ -1,3 +1,12 @@
-%ul
+%table
+  %thead
+    %tr
+      %td User
+      %td Tool Quiz Percentage
+      %td Tools Correctly Found
+  %tbody
   - @users.each do |u|
-    %li= u.email
+    %tr
+      %td= u.email
+      %td= "#{u.tool_quiz_percentage}%"
+      %td= u.tool_quiz_correct

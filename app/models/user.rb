@@ -1,6 +1,4 @@
 class User < ActiveRecord::Base
-  has_surveys
-
   ROLES = %w|firefighter chief webmaster|
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
@@ -10,10 +8,19 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
-  # attr_accessible :title, :body
+
+  has_many :answers
 
   def method_missing(id, *args)
+    # such as .firefighter? or .webmaster?
     return role == Regexp.last_match(1) if id.id2name =~ /^(.+)\?$/
+
+    # such as .tool_quiz_percentage
+    return self.answers.question_type(Regexp.last_match(1)).percent_correct[0].percent.to_i if id.id2name =~ /^(.+)_percentage$/
+
+    # such as .tool_quiz_correct
+    return self.answers.question_type(Regexp.last_match(1)).correct[0].count.to_i if id.id2name =~ /^(.+)_correct$/
+
     raise NoMethodError
   end
 end
