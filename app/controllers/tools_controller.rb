@@ -39,7 +39,9 @@ class ToolsController < ApplicationController
     @results[:right] = params[:results][:right].to_i
 
     old_tool = Tool.find(params[:id])
-    if old_tool.compartment == Compartment.find(params[:answer])
+    correct = old_tool.compartment == Compartment.find(params[:answer])
+    Answer.create(user_id: current_user.id, question_type: "tool_quiz", question_id: old_tool.id, correct: correct)
+    if correct
       @results[:right] += 1
       flash.now[:notice] = "Correct!"
     else

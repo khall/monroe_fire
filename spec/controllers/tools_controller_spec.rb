@@ -275,11 +275,13 @@ describe ToolsController do
   describe "quiz_answer" do
     describe "when logged in" do
       before :each do
-        sign_in Fabricate(:user, role: :firefighter)
+        @user = Fabricate(:user, role: :firefighter)
+        sign_in @user
       end
 
       it "answered correctly, should increment correct results, get a new tool, render 'quiz_answer', return response of 200" do
         t = Fabricate(:tool)
+        Answer.all.count.should == 0
         put :quiz_answer, id: t.id, answer: t.compartment.id, results: {questions: 0, correct: 0}
         response.should be_success
         response.should render_template(:quiz)
@@ -287,11 +289,15 @@ describe ToolsController do
         assigns[:results][:questions].should == 1
         assigns[:results][:right].should == 1
         flash[:notice].should == "Correct!"
+        Answer.all.count.should == 1
+        Answer.first.user.should == @user
+        Answer.first.correct.should == true
       end
 
       it "answered incorrectly, should increment questions but not correct results, provide the correct answer" do
         t = Fabricate(:tool)
         c = Fabricate(:compartment)
+        Answer.all.count.should == 0
         put :quiz_answer, id: t.id, answer: c.id, results: {questions: 0, correct: 0}
         response.should be_success
         response.should render_template(:quiz)
@@ -299,6 +305,9 @@ describe ToolsController do
         assigns[:results][:questions].should == 1
         assigns[:results][:right].should == 0
         flash[:alert].should == "The #{t.name} is located in the #{t.compartment.description} on #{t.vehicle.name}"
+        Answer.all.count.should == 1
+        Answer.first.user.should == @user
+        Answer.first.correct.should == false
       end
 
       it "multiple tools, should render 'quiz_answer', randomly pick a tool, return response of 200" do
@@ -309,6 +318,7 @@ describe ToolsController do
                  Fabricate(:tool),
                  Fabricate(:tool)
         ]
+        Answer.all.count.should == 0
         put :quiz_answer, id: tools[0].id, answer: tools[0].compartment.id, results: {questions: 0, correct: 0}
         response.should be_success
         response.should render_template(:quiz)
@@ -316,6 +326,9 @@ describe ToolsController do
         assigns[:results][:questions].should == 1
         assigns[:results][:right].should == 1
         flash[:notice].should == "Correct!"
+        Answer.all.count.should == 1
+        Answer.first.user.should == @user
+        Answer.first.correct.should == true
       end
     end
 
