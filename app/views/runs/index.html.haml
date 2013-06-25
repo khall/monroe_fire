@@ -26,12 +26,14 @@
   Call frequency by day
 #chart_hours
   Call frequency by hour
-- day_data = day_stats
-%p= "Day of the week most likely to have calls: #{day_data[:most]}"
-%p= "Day of the week least likely to have calls: #{day_data[:least]}"
-- hour_data = hour_stats
-%p= "Hour of day most likely to have calls: #{hour_data[:most]}"
-%p= "Hour of day least likely to have calls: #{hour_data[:least]}"
+#old_days
+  - day_data = day_stats
+  %p= "Day of the week most likely to have calls: #{day_data[:most]}"
+  %p= "Day of the week least likely to have calls: #{day_data[:least]}"
+#old_hours
+  - hour_data = hour_stats
+  %p= "Hour of day most likely to have calls: #{hour_data[:most]}"
+  %p= "Hour of day least likely to have calls: #{hour_data[:least]}"
 
 :javascript
   var browserVersion = 10;
@@ -44,6 +46,7 @@
   if (browserVersion < 9) {
     $('#chart_days, #chart_hours').hide();
   } else {
+    $('#old_days, #old_hours').hide();
     var margin = {top: 20, right: 20, bottom: 30, left: 40},
         width = 800 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
