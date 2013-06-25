@@ -148,7 +148,7 @@
 -#        .attr("y", function(d) { return y(d.num); })
 -#        .attr("height", function(d) { return height - y(d.num); });
 
-%table{cellspacing: 0}
+%table#runs{cellspacing: 0}
   %thead
     %th Date
     %th Alarm #
@@ -177,3 +177,45 @@
         %td= run.in_route_time.strftime('%R')
         %td= run.arrived_time.strftime('%R')
         %td= run.in_quarters_time.strftime('%R')
+
+:javascript
+  TableThing = function(params) {
+      settings = {
+          table: $('#runs'),
+          thead: []
+      };
+
+      this.fixThead = function() {
+          // empty our array to begin with
+          settings.thead = [];
+          // loop over the first row of td's in <tbody> and get the widths of individual <td>'s
+          $('tbody tr:eq(3) td', settings.table).each( function(i,v){
+              settings.thead.push($(v).width() + 14);
+          });
+
+          // now loop over our array setting the widths we've got to the <th>'s
+          for(i=0;i<settings.thead.length;i++) {
+              $('thead th:eq('+i+')', settings.table).width(settings.thead[i]);
+              $('tbody td:eq('+i+')', settings.table).width(settings.thead[i]);
+          }
+
+          // here we attach to the scroll, adding the class 'fixed' to the <thead>
+          $(window).scroll(function() {
+              var windowTop = $(window).scrollTop();
+
+              if (windowTop > settings.table.offset().top) {
+                  $("thead", settings.table).addClass("fixed");
+              }
+              else {
+                  $("thead", settings.table).removeClass("fixed");
+              }
+          });
+      }
+  }
+  $(function(){
+      var table = new TableThing();
+      table.fixThead();
+      $(window).resize(function(){
+          table.fixThead();
+      });
+  });
