@@ -1,31 +1,31 @@
--#%script{src: "http://d3js.org/d3.v3.min.js", charset:"utf-8"}
+%script{src: "http://d3js.org/d3.v3.min.js", charset:"utf-8"}
 
 :css
   td {
     text-align: center;
   }
 
-  -#.axis path,
-  -#.axis line {
-  -#  fill: none;
-  -#  stroke: #000;
-  -#  shape-rendering: crispEdges;
-  -#}
-  -#
-  -#.bar {
-  -#  fill: steelblue;
-  -#}
-  -#
-  -#.x.axis path {
-  -#  display: none;
-  -#}
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .bar {
+    fill: steelblue;
+  }
+
+  .x.axis path {
+    display: none;
+  }
 
 = link_to "Add Run", new_run_path if can? :create, @runs
 
--##chart_days
--#  Call frequency by day
--##chart_hours
--#  Call frequency by hour
+#chart_days
+  Call frequency by day
+#chart_hours
+  Call frequency by hour
 - day_data = day_stats
 %p= "Day of the week most likely to have calls: #{day_data[:most]}"
 %p= "Day of the week least likely to have calls: #{day_data[:least]}"
@@ -33,120 +33,131 @@
 %p= "Hour of day most likely to have calls: #{hour_data[:most]}"
 %p= "Hour of day least likely to have calls: #{hour_data[:least]}"
 
--#:javascript
--#  var margin = {top: 20, right: 20, bottom: 30, left: 40},
--#      width = 800 - margin.left - margin.right,
--#      height = 200 - margin.top - margin.bottom;
--#
--#  var x = d3.scale.ordinal()
--#      .rangeRoundBands([0, width], .1);
--#
--#  var y = d3.scale.linear()
--#      .range([height, 0]);
--#
--#  var xAxis = d3.svg.axis()
--#      .scale(x)
--#      .orient("bottom");
--#
--#  var yAxis = d3.svg.axis()
--#      .scale(y)
--#      .orient("left");
--#
--#  var svg = d3.select("#chart_days").append("svg")
--#      .attr("width", width + margin.left + margin.right)
--#      .attr("height", height + margin.top + margin.bottom)
--#    .append("g")
--#      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
--#
--#  data = #{raw @unsorted_day_stats.to_json};
--#
--#  data.forEach(function(d) {
--#    d.num = +d.num;
--#  });
--#
--#  x.domain(data.map(function(d) { return d.name; }));
--#  y.domain([0, d3.max(data, function(d) { return d.num; })]);
--#
--#  svg.append("g")
--#      .attr("class", "x axis")
--#      .attr("transform", "translate(0," + height + ")")
--#      .call(xAxis);
--#
--#  svg.append("g")
--#      .attr("class", "y axis")
--#      .call(yAxis)
--#    .append("text")
--#      .attr("transform", "rotate(-90)")
--#      .attr("y", 6)
--#      .attr("dy", ".71em")
--#      .style("text-anchor", "end");
--#
--#  svg.selectAll(".bar")
--#      .data(data)
--#    .enter().append("rect")
--#      .attr("class", "bar")
--#      .attr("x", function(d) { return x(d.name); })
--#      .attr("width", x.rangeBand())
--#      .attr("y", function(d) { return y(d.num); })
--#      .attr("height", function(d) { return height - y(d.num); });
--#
--#  // next
--#
--#  var margin = {top: 20, right: 20, bottom: 30, left: 40},
--#        width = 800 - margin.left - margin.right,
--#        height = 200 - margin.top - margin.bottom;
--#
--#    var x = d3.scale.ordinal()
--#        .rangeRoundBands([0, width], .1);
--#
--#    var y = d3.scale.linear()
--#        .range([height, 0]);
--#
--#    var xAxis = d3.svg.axis()
--#        .scale(x)
--#        .orient("bottom");
--#
--#    var yAxis = d3.svg.axis()
--#        .scale(y)
--#        .orient("left");
--#
--#    var svg = d3.select("#chart_hours").append("svg")
--#        .attr("width", width + margin.left + margin.right)
--#        .attr("height", height + margin.top + margin.bottom)
--#      .append("g")
--#        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
--#
--#    data = #{raw @unsorted_hour_stats.to_json};
--#
--#    data.forEach(function(d) {
--#      d.num = +d.num;
--#    });
--#
--#    x.domain(data.map(function(d) { return d.name; }));
--#    y.domain([0, d3.max(data, function(d) { return d.num; })]);
--#
--#    svg.append("g")
--#        .attr("class", "x axis")
--#        .attr("transform", "translate(0," + height + ")")
--#        .call(xAxis);
--#
--#    svg.append("g")
--#        .attr("class", "y axis")
--#        .call(yAxis)
--#      .append("text")
--#        .attr("transform", "rotate(-90)")
--#        .attr("y", 6)
--#        .attr("dy", ".71em")
--#        .style("text-anchor", "end");
--#
--#    svg.selectAll(".bar")
--#        .data(data)
--#      .enter().append("rect")
--#        .attr("class", "bar")
--#        .attr("x", function(d) { return x(d.name); })
--#        .attr("width", x.rangeBand())
--#        .attr("y", function(d) { return y(d.num); })
--#        .attr("height", function(d) { return height - y(d.num); });
+:javascript
+  var browserVersion = 10;
+  if (navigator.appName == 'Microsoft Internet Explorer') {
+    var agent = navigator.userAgent;
+    var regex  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+    if (regex.exec(agent) != null)
+      browserVersion = parseFloat( RegExp.$1 );
+  }
+  if (browserVersion < 9) {
+    $('#chart_days, #chart_hours').hide();
+  } else {
+    var margin = {top: 20, right: 20, bottom: 30, left: 40},
+        width = 800 - margin.left - margin.right,
+        height = 200 - margin.top - margin.bottom;
+
+    var x = d3.scale.ordinal()
+        .rangeRoundBands([0, width], .1);
+
+    var y = d3.scale.linear()
+        .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
+    var svg = d3.select("#chart_days").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    data = #{raw @unsorted_day_stats.to_json};
+
+    data.forEach(function(d) {
+      d.num = +d.num;
+    });
+
+    x.domain(data.map(function(d) { return d.name; }));
+    y.domain([0, d3.max(data, function(d) { return d.num; })]);
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+      .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end");
+
+    svg.selectAll(".bar")
+        .data(data)
+      .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d) { return x(d.name); })
+        .attr("width", x.rangeBand())
+        .attr("y", function(d) { return y(d.num); })
+        .attr("height", function(d) { return height - y(d.num); });
+
+    // next
+
+    var margin = {top: 20, right: 20, bottom: 30, left: 40},
+          width = 800 - margin.left - margin.right,
+          height = 200 - margin.top - margin.bottom;
+
+      var x = d3.scale.ordinal()
+          .rangeRoundBands([0, width], .1);
+
+      var y = d3.scale.linear()
+          .range([height, 0]);
+
+      var xAxis = d3.svg.axis()
+          .scale(x)
+          .orient("bottom");
+
+      var yAxis = d3.svg.axis()
+          .scale(y)
+          .orient("left");
+
+      var svg = d3.select("#chart_hours").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      data = #{raw @unsorted_hour_stats.to_json};
+
+      data.forEach(function(d) {
+        d.num = +d.num;
+      });
+
+      x.domain(data.map(function(d) { return d.name; }));
+      y.domain([0, d3.max(data, function(d) { return d.num; })]);
+
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+      svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+        .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end");
+
+      svg.selectAll(".bar")
+          .data(data)
+        .enter().append("rect")
+          .attr("class", "bar")
+          .attr("x", function(d) { return x(d.name); })
+          .attr("width", x.rangeBand())
+          .attr("y", function(d) { return y(d.num); })
+          .attr("height", function(d) { return height - y(d.num); });
+  }
 
 %table{cellspacing: 0}
   %thead
