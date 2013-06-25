@@ -43,7 +43,7 @@ class RunsController < ApplicationController
 
   def get_run_type(str)
     #				1			____
-    type_order = ['burn_complaint', 'fire', 'rescue', 'motor_vehicle_accident', 'hazmat', 'mutual_aid']
+    type_order = ['burn_complaint', 'fire', 'rescue', 'mvc', 'hazmat', 'mutual_aid']
     #                        <-- date ---> run #<-type-->
     match_data = str.match(/^\d+\/\d+\/\d+\t\d+(\t+\d\t+)\d:\d+/)
     position = nil

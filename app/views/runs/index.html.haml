@@ -182,7 +182,7 @@
       %tr{class: even ? "even_row": ""}
         %td= run.date.strftime('%D')
         %td= run.alarm_number
-        %td= run.run_type.humanize
+        %td= run.run_type == 'mvc' ? run.run_type.upcase : run.run_type.humanize
         %td= pretty_time run.total_time_out
         %td= run.number_of_responders
         %td= pretty_time run.minutes_in_route
