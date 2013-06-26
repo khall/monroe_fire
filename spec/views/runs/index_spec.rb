@@ -143,12 +143,27 @@ describe "runs/index" do
       rendered.should =~ /Total time on calls: 2 hours/
     end
 
+    it "determines the total man hours on calls for zero runs" do
+      runs = []
+      assign(:runs, runs)
+      render
+      rendered.should =~ /Total man hours: 0/
+    end
+
+    it "determines the total man hours on calls for some runs with vastly different run man hours" do
+      runs = [Fabricate(:run, date: Time.now, in_quarters_time: Time.now + 600.minutes, number_of_responders: 99),
+              Fabricate(:run, date: Time.now, in_quarters_time: Time.now + 60.minutes, number_of_responders: 1)]
+      assign(:runs, runs)
+      render
+      rendered.should =~ /Total man hours: 991/
+    end
+
     it "determines the total man hours on calls for some runs" do
-      runs = [Fabricate(:run, date: Time.now, in_quarters_time: Time.now + 52.minutes, number_of_responders: 10),
+      runs = [Fabricate(:run, date: Time.now, in_quarters_time: Time.now + 50.minutes, number_of_responders: 10),
               Fabricate(:run, date: Time.now, in_quarters_time: Time.now + 70.minutes, number_of_responders: 8)]
       assign(:runs, runs)
       render
-      rendered.should =~ /Total man hours: 18/
+      rendered.should =~ /Total man hours: 17/
     end
 
     it "determines the average time to go in route for zero runs" do
