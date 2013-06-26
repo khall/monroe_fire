@@ -250,7 +250,17 @@
     %th In quarters
   %tbody
     - even = true
+    - count = 0
+    - total_personnel = 0
+    - total_time_out = 0
+    - total_in_route_time = 0
+    - total_to_scene_time = 0
     - @runs.each do |run|
+      - count += 1
+      - total_personnel += run.number_of_responders
+      - total_time_out += run.total_time_out
+      - total_in_route_time += run.minutes_in_route
+      - total_to_scene_time += run.minutes_to_scene
       - even = !even
       %tr{class: even ? "even_row": ""}
         %td= run.date.strftime('%D')
@@ -264,3 +274,9 @@
         %td= run.in_route_time.strftime('%R')
         %td= run.arrived_time.strftime('%R')
         %td= run.in_quarters_time.strftime('%R')
+.summary
+  %p= "Average (mean) personnel response: #{total_personnel / count}"
+  %p= "Total time on calls: #{total_time_out / 60} hours"
+  %p= "Total man hours: #{total_time_out / 60 * total_personnel}"
+  %p= "Average (mean) time to go in route: #{total_in_route_time / count} minutes"
+  %p= "Average (mean) time to arrive: #{total_to_scene_time / count} minutes"
