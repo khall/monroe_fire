@@ -1,4 +1,5 @@
-%script{src: "http://d3js.org/d3.v3.min.js", charset:"utf-8"}
+= javascript_include_tag "http://d3js.org/d3.v3.min.js"
+= javascript_include_tag "underscore.js"
 
 :css
   td {
@@ -22,10 +23,14 @@
 
 = link_to "Add Run", new_run_path if can? :create, @runs
 
-#chart_days
-  Call frequency by day
-#chart_hours
-  Call frequency by hour
+#charts
+  %p
+    - options = options_for_select(["All"] + Run.run_types.map{|rt| rt == 'mvc' ? rt.upcase : rt.humanize})
+    = select_tag :chart_filter, options
+  #chart_days
+    Call frequency by day
+  #chart_hours
+    Call frequency by hour
 #old_days
   - day_data = day_stats
   %p= "Day of the week most likely to have calls: #{day_data[:most]}"
@@ -40,36 +45,104 @@
   if (navigator.appName == 'Microsoft Internet Explorer') {
     var agent = navigator.userAgent;
     var regex  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
-    if (regex.exec(agent) != null)
+    if (regex.exec(agent) != null) {
       browserVersion = parseFloat( RegExp.$1 );
+    }
   }
   if (browserVersion < 9) {
-    $('#chart_days, #chart_hours').hide();
+    $('#charts').hide();
   } else {
     $('#old_days, #old_hours').hide();
-    var margin = {top: 20, right: 20, bottom: 30, left: 40},
-        width = 800 - margin.left - margin.right,
-        height = 200 - margin.top - margin.bottom;
 
-    var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1);
+    var data;
+    var runType;
+    var allData = #{raw @runs.map{|r| {run_type: r.run_type, weekday: r.date.wday, hour: r.date.to_time.hour}}.to_json};
+    $('#chart_filter').bind('change', function(ev){
+      runType = $('#chart_filter').val().toLowerCase().replace(' ', '_');
+      // update charts with filtered data
+      if (runType == "all") {
+        data = allData;
+      } else {
+        data = _.filter(allData, function(r){ return r.run_type == runType })
+      }
 
-    var y = d3.scale.linear()
-        .range([height, 0]);
+      // weekday & hour reductions
+
+      weekdayData = [0, 0, 0, 0, 0, 0, 0];
+      _.each(data, function(r){
+        weekdayData[r.weekday] += 1;
+      });
+
+      hourData = [0, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0, 0];
+      _.each(data, function(r){
+        hourData[r.hour] += 1;
+      });
+
+      // convert to num/name hashes
+
+      weekdayHash = [{"name": "Sunday", "num": weekdayData[0]},
+                     {"name": "Monday", "num": weekdayData[1]},
+                     {"name": "Tuesday", "num": weekdayData[2]},
+                     {"name": "Wednesday", "num": weekdayData[3]},
+                     {"name": "Thursday", "num": weekdayData[4]},
+                     {"name": "Friday", "num": weekdayData[5]},
+                     {"name": "Saturday", "num": weekdayData[6]},
+                    ];
+
+      hourHash = [];
+      _.each(hourData, function(r, i){
+        hourHash[i] = {"name": i, "num": r};
+      })
+
+      svgDays.selectAll(".bar")
+          .data(weekdayHash)
+          .transition()
+          .duration(300)
+          .attr("class", "bar")
+          .attr("x", function(d) { return xDays(d.name); })
+          .attr("width", xDays.rangeBand())
+          .attr("y", function(d) { return yDays(d.num); })
+          .attr("height", function(d) { return heightDays - yDays(d.num); });
+
+      svgHours.selectAll(".bar")
+          .data(hourHash)
+          .transition()
+          .duration(300)
+          .attr("class", "bar")
+          .attr("x", function(d) { return x(d.name); })
+          .attr("width", x.rangeBand())
+          .attr("y", function(d) { return y(d.num); })
+          .attr("height", function(d) { return height - y(d.num); });
+    })
+
+    // weekday stats
+
+    var marginDays = {top: 20, right: 20, bottom: 30, left: 40},
+        widthDays = 800 - marginDays.left - marginDays.right,
+        heightDays = 200 - marginDays.top - marginDays.bottom;
+
+    var xDays = d3.scale.ordinal()
+        .rangeRoundBands([0, widthDays], .1);
+
+    var yDays = d3.scale.linear()
+        .range([heightDays, 0]);
 
     var xAxis = d3.svg.axis()
-        .scale(x)
+        .scale(xDays)
         .orient("bottom");
 
     var yAxis = d3.svg.axis()
-        .scale(y)
+        .scale(yDays)
         .orient("left");
 
-    var svg = d3.select("#chart_days").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+    var svgDays = d3.select("#chart_days").append("svg")
+        .attr("width", widthDays + marginDays.left + marginDays.right)
+        .attr("height", heightDays + marginDays.top + marginDays.bottom)
       .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(" + marginDays.left + "," + marginDays.top + ")");
 
     data = #{raw @unsorted_day_stats.to_json};
 
@@ -77,15 +150,15 @@
       d.num = +d.num;
     });
 
-    x.domain(data.map(function(d) { return d.name; }));
-    y.domain([0, d3.max(data, function(d) { return d.num; })]);
+    xDays.domain(data.map(function(d) { return d.name; }));
+    yDays.domain([0, d3.max(data, function(d) { return d.num; })]);
 
-    svg.append("g")
+    svgDays.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
+        .attr("transform", "translate(0," + heightDays + ")")
         .call(xAxis);
 
-    svg.append("g")
+    svgDays.append("g")
         .attr("class", "y axis")
         .call(yAxis)
       .append("text")
@@ -94,16 +167,16 @@
         .attr("dy", ".71em")
         .style("text-anchor", "end");
 
-    svg.selectAll(".bar")
+    svgDays.selectAll(".bar")
         .data(data)
       .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function(d) { return x(d.name); })
-        .attr("width", x.rangeBand())
-        .attr("y", function(d) { return y(d.num); })
-        .attr("height", function(d) { return height - y(d.num); });
+        .attr("x", function(d) { return xDays(d.name); })
+        .attr("width", xDays.rangeBand())
+        .attr("y", function(d) { return yDays(d.num); })
+        .attr("height", function(d) { return heightDays - yDays(d.num); });
 
-    // next
+    // hour stats
 
     var margin = {top: 20, right: 20, bottom: 30, left: 40},
           width = 800 - margin.left - margin.right,
@@ -123,7 +196,7 @@
           .scale(y)
           .orient("left");
 
-      var svg = d3.select("#chart_hours").append("svg")
+      var svgHours = d3.select("#chart_hours").append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -138,12 +211,12 @@
       x.domain(data.map(function(d) { return d.name; }));
       y.domain([0, d3.max(data, function(d) { return d.num; })]);
 
-      svg.append("g")
+      svgHours.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
           .call(xAxis);
 
-      svg.append("g")
+      svgHours.append("g")
           .attr("class", "y axis")
           .call(yAxis)
         .append("text")
@@ -152,7 +225,7 @@
           .attr("dy", ".71em")
           .style("text-anchor", "end");
 
-      svg.selectAll(".bar")
+      svgHours.selectAll(".bar")
           .data(data)
         .enter().append("rect")
           .attr("class", "bar")

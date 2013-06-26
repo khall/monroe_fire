@@ -19,6 +19,10 @@ class Run < ActiveRecord::Base
     ((arrived_time - date) / 60).to_i
   end
 
+  def self.run_types
+    Run.select('run_type').map(&:run_type).uniq
+  end
+
   private
 
   def unique_alarm_number_in_year
