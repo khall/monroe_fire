@@ -275,8 +275,8 @@
         %td= run.arrived_time.strftime('%R')
         %td= run.in_quarters_time.strftime('%R')
 .summary
-  %p= "Average (mean) personnel response: #{total_personnel / count}"
+  %p= "Average (mean) personnel response: #{count == 0 ? 0 : total_personnel / count}"
   %p= "Total time on calls: #{total_time_out / 60} hours"
-  %p= "Total man hours: #{total_time_out / 60 * total_personnel}"
-  %p= "Average (mean) time to go in route: #{total_in_route_time / count} minutes"
-  %p= "Average (mean) time to arrive: #{total_to_scene_time / count} minutes"
+  %p= "Total man hours: #{total_time_out * total_personnel / 60.0 / count}"
+  %p= "Average (mean) time to go in route: #{count == 0 ? 0 : total_in_route_time / count} minutes"
+  %p= "Average (mean) time to arrive: #{count == 0 ? 0 : total_to_scene_time / count} minutes"
