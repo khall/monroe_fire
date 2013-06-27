@@ -1,5 +1,5 @@
 class ToolsController < ApplicationController
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
   load_resource only: [:show, :edit]
   authorize_resource except: [:quiz, :quiz_answer]
 
@@ -65,5 +65,13 @@ class ToolsController < ApplicationController
     end
     @compartments.shuffle!
     @results = {questions: 0, right: 0}
+  end
+
+  def tool_params
+    params.require(:tools).permit(:compartment_id, :name, :quantity, :use)
+  end
+
+  def answer_params
+    params.require(:answers).permit(:correct, :question_id, :question_type, :user_id)
   end
 end

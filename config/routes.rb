@@ -6,7 +6,7 @@ Fire::Application.routes.draw do
   resources :tools, only: [:index, :show, :edit, :update] do
     collection do
       get :quiz
-      put :quiz_answer
+      patch :quiz_answer
     end
   end
   resources :users, only: [:index]

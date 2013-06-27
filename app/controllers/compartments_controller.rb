@@ -1,5 +1,5 @@
 class CompartmentsController < ApplicationController
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
   load_resource only: [:edit]
   authorize_resource
 
@@ -19,5 +19,11 @@ class CompartmentsController < ApplicationController
       flash[:alert] = "Compartment not updated"
     end
     redirect_to edit_compartment_path, id: @compartment.id
+  end
+
+  private
+
+  def compartment_params
+    params.require(:tools).permit(:description, :vehicle_id)
   end
 end

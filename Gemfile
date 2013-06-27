@@ -2,9 +2,9 @@ source 'https://rubygems.org'
 
 gem 'calendar_helper'
 gem 'cancan'
-gem 'devise'
+gem 'devise', '~> 3.0.0.rc'
 gem 'haml'
-gem 'rails', '3.2.12'
+gem 'rails', '4.0.0'
 gem 'thin'
 gem 'unicorn'
 #gem 'rmagick'
@@ -15,22 +15,20 @@ gem 'execjs'
 gem 'therubyracer'
 
 # CMS
-gem 'comfortable_mexican_sofa'
+gem 'comfortable_mexican_sofa', '~> 2.0.0.beta1'
 
 gem 'pg'
 
 
 # Gems used only for assets and not required
 # in production environments by default.
-group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+gem 'sass-rails',   '~> 4.0.0'
+gem 'coffee-rails'
 
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platforms => :ruby
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+# gem 'therubyracer', :platforms => :ruby
 
-  gem 'uglifier', '>= 1.0.3'
-end
+gem 'uglifier', '>= 1.3.0'
 
 gem 'jquery-rails'
 

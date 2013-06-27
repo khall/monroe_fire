@@ -4,7 +4,7 @@ class Answer < ActiveRecord::Base
   belongs_to :user
   #belongs_to :question
                                                                                #
-  scope :question_type, lambda{|t| where("question_type = ?", t)}
-  scope :percent_correct, select("100 * AVG(correct::int) as percent")
-  scope :correct, where("correct = true").select("count(correct) as count")
+  scope :question_type, -> {|t| where("question_type = ?", t) }
+  scope :percent_correct, -> { select("100 * AVG(correct::int) as percent") }
+  scope :correct, -> { where("correct = true").select("count(correct) as count") }
 end

@@ -1,5 +1,5 @@
 class RunsController < ApplicationController
-  before_filter :authenticate_user!, only: [:new, :create]
+  before_action :authenticate_user!, only: [:new, :create]
   load_and_authorize_resource
   EXCEL_ROWS = 11
 
@@ -81,5 +81,9 @@ class RunsController < ApplicationController
     run.in_route_time = in_route_time
     run.arrived_time = arrived_time
     run.in_quarters_time = in_quarters_time
+  end
+
+  def run_params
+    params.require(:runs).permit(:date, :alarm_number, :run_type, :number_of_responders, :time_out, :in_route_time, :arrived_time, :in_quarters_time)
   end
 end

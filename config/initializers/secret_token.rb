@@ -7,3 +7,4 @@
 token = 'developmentdevelopmentdevelopmentdevelopmentdevelopment'
 raise "Secret token needs to be set to something secret" if Rails.env.production? && (token == 'development' || token.length < 30)
 Fire::Application.config.secret_token = token
+Fire::Application.config.secret_key_base = token
