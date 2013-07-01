@@ -5,8 +5,9 @@
   = "Percentage: #{percent.to_i}%"
 
 #question
-  = "Where is the #{@tool.name} on #{@tool.vehicle.name}?"
+  - plural = @tool.name.last == 's'
+  = "Where #{plural ? 'are' : 'is'} the #{@tool.name} on #{@tool.vehicle.name}?"
 
 %ul#answers
   - @compartments.each do |c|
-    %li= link_to c.description, quiz_answer_tools_path(id: @tool.id, answer: c.id, results: {questions: @results[:questions], right: @results[:right]}), method: :put
+    %li= link_to c.description, quiz_answer_tools_path(id: @tool.id, answer: c.id, results: {questions: @results[:questions], right: @results[:right]}), method: :patch

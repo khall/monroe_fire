@@ -24,6 +24,7 @@ gem 'pg'
 # in production environments by default.
 gem 'sass-rails',   '~> 4.0.0'
 gem 'coffee-rails'
+gem 'turbolinks'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', :platforms => :ruby

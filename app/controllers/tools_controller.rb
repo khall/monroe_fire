@@ -20,7 +20,7 @@ class ToolsController < ApplicationController
 
   def update
     @tool = Tool.find(params[:id])
-    if @tool.update_attributes(params[:tool])
+    if @tool.update(tool_params)
       flash.now[:notice] = "Tool updated"
     else
       flash.now[:alert] = "Tool not updated"
@@ -68,7 +68,7 @@ class ToolsController < ApplicationController
   end
 
   def tool_params
-    params.require(:tools).permit(:compartment_id, :name, :quantity, :use)
+    params.require(:tool).permit(:compartment_id, :name, :quantity, :use)
   end
 
   def answer_params

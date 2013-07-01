@@ -1,6 +1,6 @@
 Fabricator(:run) do
   date { Time.now - 10.minutes }
-  alarm_number { Fabricate.sequence(:alarm, 1) }
+  alarm_number { sequence(:alarm, 1) }
   run_type { %w(burn_complaint fire rescue mvc hazmat mutual_aid).sample }
   number_of_responders { rand(15) }
   time_out { rand(120) }

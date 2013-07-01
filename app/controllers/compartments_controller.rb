@@ -13,7 +13,7 @@ class CompartmentsController < ApplicationController
   def update
     @compartment = Compartment.find(params[:id])
     @compartment.description = @compartment.description.strip
-    if @compartment.update_attributes(params[:compartment])
+    if @compartment.update(compartment_params)
       flash[:notice] = "Compartment updated"
     else
       flash[:alert] = "Compartment not updated"
@@ -24,6 +24,6 @@ class CompartmentsController < ApplicationController
   private
 
   def compartment_params
-    params.require(:tools).permit(:description, :vehicle_id)
+    params.require(:compartment).permit(:description, :vehicle_id)
   end
 end

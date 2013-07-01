@@ -18,6 +18,6 @@ class User < ActiveRecord::Base
     # such as .tool_quiz_correct
     return self.answers.question_type(Regexp.last_match(1)).correct[0].count.to_i if id.id2name =~ /^(.+)_correct$/
 
-    raise NoMethodError
+    raise NoMethodError, "method: #{id.id2name}"
   end
 end

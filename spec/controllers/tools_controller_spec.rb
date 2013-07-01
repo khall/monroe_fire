@@ -174,7 +174,7 @@ describe ToolsController do
 
       it "should render 'edit', return response of 200" do
         t = Fabricate(:tool, name: "bad name")
-        put :update, id: t.id, tool: {name: "good name"}
+        patch :update, id: t.id, tool: {name: "good name"}
         response.should be_redirect
         response.should redirect_to edit_tool_path
         assigns[:tool].name.should == "good name"
@@ -184,7 +184,7 @@ describe ToolsController do
     describe "when logged out" do
       it "should redirect to the login page" do
         t = Fabricate(:tool)
-        put :update, id: t.id
+        patch :update, id: t.id
         response.should be_redirect
         response.should redirect_to new_user_session_path
       end
@@ -194,7 +194,7 @@ describe ToolsController do
       it "should redirect to the home page with a flash message saying the user lacks permission to edit" do
         sign_in Fabricate(:user, role: :firefighter)
         t = Fabricate(:tool)
-        put :update, id: t.id
+        patch :update, id: t.id
         response.should be_redirect
         response.should redirect_to root_path
         flash[:alert].should == "You are not authorized to access this page."
@@ -220,7 +220,7 @@ describe ToolsController do
         response.should be_success
         response.should render_template(:quiz)
         assigns[:tool].name.should == t.name
-        assigns[:compartments].class.should == ActiveRecord::Relation
+        assigns[:compartments].class.should == ActiveRecord::Relation::ActiveRecord_Relation_Compartment
         assigns[:compartments].map(&:id).uniq.length.should == ANSWER_CHOICES
         @compartments.each do |c|
           assigns[:compartments].include?(c).should == true
@@ -240,7 +240,7 @@ describe ToolsController do
         response.should be_success
         response.should render_template(:quiz)
         tools.map(&:name).include?(assigns[:tool].name).should ==  true
-        assigns[:compartments].class.should == ActiveRecord::Relation
+        assigns[:compartments].class.should == ActiveRecord::Relation::ActiveRecord_Relation_Compartment
         assigns[:compartments].map(&:id).uniq.length.should == ANSWER_CHOICES
         @compartments.each do |c|
           assigns[:compartments].include?(c).should == true
@@ -258,7 +258,7 @@ describe ToolsController do
         response.should render_template(:quiz)
         assigns[:tool].name.should == t.name
         assigns[:compartments].include?(assigns[:tool].compartment).should == true
-        assigns[:compartments].class.should == ActiveRecord::Relation
+        assigns[:compartments].class.should == ActiveRecord::Relation::ActiveRecord_Relation_Compartment
         assigns[:compartments].size.should == ANSWER_CHOICES
       end
     end
@@ -282,7 +282,7 @@ describe ToolsController do
       it "answered correctly, should increment correct results, get a new tool, render 'quiz_answer', return response of 200" do
         t = Fabricate(:tool)
         Answer.all.count.should == 0
-        put :quiz_answer, id: t.id, answer: t.compartment.id, results: {questions: 0, correct: 0}
+        patch :quiz_answer, id: t.id, answer: t.compartment.id, results: {questions: 0, correct: 0}
         response.should be_success
         response.should render_template(:quiz)
         assigns[:tool].name.should == t.name
@@ -298,7 +298,7 @@ describe ToolsController do
         t = Fabricate(:tool)
         c = Fabricate(:compartment)
         Answer.all.count.should == 0
-        put :quiz_answer, id: t.id, answer: c.id, results: {questions: 0, correct: 0}
+        patch :quiz_answer, id: t.id, answer: c.id, results: {questions: 0, correct: 0}
         response.should be_success
         response.should render_template(:quiz)
         assigns[:tool].name.should == t.name
@@ -319,7 +319,7 @@ describe ToolsController do
                  Fabricate(:tool)
         ]
         Answer.all.count.should == 0
-        put :quiz_answer, id: tools[0].id, answer: tools[0].compartment.id, results: {questions: 0, correct: 0}
+        patch :quiz_answer, id: tools[0].id, answer: tools[0].compartment.id, results: {questions: 0, correct: 0}
         response.should be_success
         response.should render_template(:quiz)
         tools.map(&:name).include?(assigns[:tool].name).should ==  true
@@ -334,7 +334,7 @@ describe ToolsController do
 
     describe "when logged out" do
       it "should redirect to the login page" do
-        put :quiz_answer
+        patch :quiz_answer
         response.should be_redirect
         response.should redirect_to new_user_session_path
       end

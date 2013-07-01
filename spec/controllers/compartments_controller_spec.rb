@@ -65,7 +65,7 @@ describe CompartmentsController do
 
       it "should render 'edit', return response of 200" do
         c = Fabricate(:compartment, description: "bad description")
-        put :update, id: c.id, compartment: {description: "good description"}
+        patch :update, id: c.id, compartment: {description: "good description"}
         response.should be_redirect
         response.should redirect_to edit_compartment_path
         assigns[:compartment].description.should == "good description"
@@ -76,7 +76,7 @@ describe CompartmentsController do
     describe "when logged out" do
       it "should redirect to the login page" do
         c = Fabricate(:compartment)
-        put :update, id: c.id
+        patch :update, id: c.id
         response.should be_redirect
         response.should redirect_to new_user_session_path
       end
@@ -86,7 +86,7 @@ describe CompartmentsController do
       it "should redirect to the home page with a flash message saying the user lacks permission to edit" do
         sign_in Fabricate(:user, role: :firefighter)
         c = Fabricate(:compartment)
-        put :update, id: c.id
+        patch :update, id: c.id
         response.should be_redirect
         response.should redirect_to root_path
         flash[:alert].should == "You are not authorized to access this page."

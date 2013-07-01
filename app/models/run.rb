@@ -2,9 +2,9 @@ class Run < ActiveRecord::Base
   validates_presence_of :date, :alarm_number, :run_type, :number_of_responders, :time_out, :in_route_time, :arrived_time, :in_quarters_time
   validate :unique_alarm_number_in_year
 
-  scope :alarm_number, -> {|alarm_number| { conditions: "alarm_number = #{alarm_number}"}}
-  scope :this_year, -> { conditions: "date >= '#{Time.now.beginning_of_year}' AND date <= '#{Time.now.end_of_year}'", order: "alarm_number ASC" }
-  scope :year, -> {|year| { conditions: "date >= '#{Time.parse("#{year}/01/01 00:00:00")}' AND date < '#{Time.parse("#{year.to_i + 1}/01/01 00:00:00")}'", order: "alarm_number ASC"}}
+  scope :alarm_number, -> (alarm_number) { where("alarm_number = #{alarm_number}") }
+  scope :this_year, -> { where("date >= '#{Time.now.beginning_of_year}' AND date <= '#{Time.now.end_of_year}'").order("alarm_number ASC") }
+  scope :year, -> (year) { where("date >= '#{Time.parse("#{year}/01/01 00:00:00")}' AND date < '#{Time.parse("#{year.to_i + 1}/01/01 00:00:00")}'").order("alarm_number ASC")}
 
   def total_time_out
     ((in_quarters_time - date) / 60).to_i

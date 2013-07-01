@@ -37,5 +37,20 @@ describe "tools/quiz" do
       rendered.should =~ /Correct: 3/
       rendered.should =~ /Percentage: 60%/
     end
+
+    it "asks where 'are' instead of 'is' when the tool ends with an 's'" do
+      v = Fabricate(:vehicle)
+      compartments = [Fabricate(:compartment, vehicle: v),
+                      Fabricate(:compartment, vehicle: v),
+                      Fabricate(:compartment, vehicle: v),
+                      Fabricate(:compartment, vehicle: v)
+      ]
+      tool = Fabricate(:tool, name: 'Traffic Vests', quantity: 2, compartment: compartments[0])
+      assign(:tool, tool)
+      assign(:compartments, compartments)
+      assign(:results, {questions: 5, right: 3})
+      render
+      rendered.should =~ /Where are the #{tool.name} on #{tool.vehicle.name}\?/
+    end
   end
 end
