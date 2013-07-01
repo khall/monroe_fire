@@ -9,7 +9,7 @@ gem 'thin'
 gem 'unicorn'
 #gem 'rmagick'
 gem 'simple_form'
-gem 'survey', :git => 'git://github.com/runtimerevolution/survey.git'
+#gem 'survey', :git => 'git://github.com/runtimerevolution/survey.git'
 
 gem 'execjs'
 gem 'therubyracer'
