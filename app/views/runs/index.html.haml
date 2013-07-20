@@ -148,6 +148,19 @@
 -#        .attr("y", function(d) { return y(d.num); })
 -#        .attr("height", function(d) { return height - y(d.num); });
 
+.fixed_head(style="display:none")
+  .date Date
+  .alarm_num Alarm #
+  .type Type
+  .time_out Total time out
+  .personnel # personnel responding
+  .response_in_route Response time in route
+  .response_to_scene Response time to scene
+  .alarm_time Alarm time
+  .in_route_time In route
+  .first_arrived_time First arrived
+  .in_quarters_time In quarters
+
 %table#runs{cellspacing: 0}
   %thead
     %th Date
@@ -179,43 +192,13 @@
         %td= run.in_quarters_time.strftime('%R')
 
 :javascript
-  TableThing = function(params) {
-      settings = {
-          table: $('#runs'),
-          thead: []
-      };
+  $(window).scroll(function() {
+      var windowTop = $(window).scrollTop();
 
-      this.fixThead = function() {
-          // empty our array to begin with
-          settings.thead = [];
-          // loop over the first row of td's in <tbody> and get the widths of individual <td>'s
-          $('tbody tr:eq(3) td', settings.table).each( function(i,v){
-              settings.thead.push($(v).width() + 14);
-          });
-
-          // now loop over our array setting the widths we've got to the <th>'s
-          for(i=0;i<settings.thead.length;i++) {
-              $('thead th:eq('+i+')', settings.table).width(settings.thead[i]);
-              $('tbody td:eq('+i+')', settings.table).width(settings.thead[i]);
-          }
-
-          // here we attach to the scroll, adding the class 'fixed' to the <thead>
-          $(window).scroll(function() {
-              var windowTop = $(window).scrollTop();
-
-              if (windowTop > settings.table.offset().top) {
-                  $("thead", settings.table).addClass("fixed");
-              }
-              else {
-                  $("thead", settings.table).removeClass("fixed");
-              }
-          });
+      if (windowTop > $(".fixed_head").offset().top) {
+          $(".fixed_head").show().css("position", "fixed");
       }
-  }
-  $(function(){
-      var table = new TableThing();
-      table.fixThead();
-      $(window).resize(function(){
-          table.fixThead();
-      });
+      else {
+          $(".fixed_head").hide().css("position", "static");
+      }
   });

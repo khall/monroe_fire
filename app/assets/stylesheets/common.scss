@@ -47,3 +47,16 @@ table {
     background-color: $even_row;
   }
 }
+
+.fixed_head {
+  display: none;
+  //position: fixed;
+  top: 0;
+  background-color: white;
+  div {
+    width: 75px;
+    float: left;
+    font-weight: bold;
+    text-align: center;
+  }
+}
