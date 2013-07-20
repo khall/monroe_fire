@@ -31,11 +31,35 @@ describe "tools/quiz" do
       assign(:tool, tool)
       assign(:compartments, compartments)
       assign(:results, {questions: 5, right: 3})
+      flash[:alert] = "nope"
       render
       rendered.should =~ /Where is the #{tool.name} on #{tool.vehicle.name}\?/
       rendered.should =~ /Questions: 5/
       rendered.should =~ /Correct: 3/
       rendered.should =~ /Percentage: 60%/
+      rendered.should =~ /img/
+      rendered.should =~ /#{tool.compartment.image_src}/
+    end
+
+    it "doesn't display a compartment picture if answer is correct" do
+      v = Fabricate(:vehicle)
+      compartments = [Fabricate(:compartment, vehicle: v),
+                      Fabricate(:compartment, vehicle: v),
+                      Fabricate(:compartment, vehicle: v),
+                      Fabricate(:compartment, vehicle: v)
+      ]
+      tool = Fabricate(:tool, name: 'Halligan', use: 'Skeleton key', quantity: 1, compartment: compartments[0])
+      assign(:tool, tool)
+      assign(:compartments, compartments)
+      assign(:results, {questions: 5, right: 3})
+      flash[:notice] = "yup"
+      render
+      rendered.should =~ /Where is the #{tool.name} on #{tool.vehicle.name}\?/
+      rendered.should =~ /Questions: 5/
+      rendered.should =~ /Correct: 3/
+      rendered.should =~ /Percentage: 60%/
+      rendered.should_not =~ /img/
+      rendered.should_not =~ /#{tool.compartment.image_src}/
     end
 
     it "asks where 'are' instead of 'is' when the tool ends with an 's'" do
