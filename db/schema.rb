@@ -21,16 +21,16 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.string   "question_type"
     t.integer  "question_id"
     t.boolean  "correct"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "cms_blocks", force: true do |t|
     t.integer  "page_id",    null: false
     t.string   "identifier", null: false
     t.text     "content"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "cms_blocks", ["page_id", "identifier"], name: "index_cms_blocks_on_page_id_and_identifier", using: :btree
@@ -60,8 +60,8 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.integer  "file_file_size",                             null: false
     t.string   "description",       limit: 2048
     t.integer  "position",                       default: 0, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
   end
 
   add_index "cms_files", ["site_id", "block_id"], name: "index_cms_files_on_site_id_and_block_id", using: :btree
@@ -80,8 +80,8 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.text     "js"
     t.integer  "position",   default: 0,     null: false
     t.boolean  "is_shared",  default: false, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   add_index "cms_layouts", ["parent_id", "position"], name: "index_cms_layouts_on_parent_id_and_position", using: :btree
@@ -100,8 +100,8 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.integer  "children_count", default: 0,     null: false
     t.boolean  "is_published",   default: true,  null: false
     t.boolean  "is_shared",      default: false, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   add_index "cms_pages", ["parent_id", "position"], name: "index_cms_pages_on_parent_id_and_position", using: :btree
@@ -135,8 +135,8 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.text     "content"
     t.integer  "position",   default: 0,     null: false
     t.boolean  "is_shared",  default: false, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   add_index "cms_snippets", ["site_id", "identifier"], name: "index_cms_snippets_on_site_id_and_identifier", unique: true, using: :btree
@@ -145,8 +145,8 @@ ActiveRecord::Schema.define(version: 20130701191639) do
   create_table "compartments", force: true do |t|
     t.integer  "vehicle_id"
     t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.string   "image_src"
   end
 
@@ -159,8 +159,8 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.datetime "in_route_time"
     t.datetime "arrived_time"
     t.datetime "in_quarters_time"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.string   "location"
   end
 
@@ -169,8 +169,8 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.integer  "question_id"
     t.integer  "option_id"
     t.boolean  "correct"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "survey_attempts", force: true do |t|
@@ -186,15 +186,15 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.integer  "weight",      default: 0
     t.string   "text"
     t.boolean  "correct"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "survey_questions", force: true do |t|
     t.integer  "survey_id"
     t.string   "text"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "survey_surveys", force: true do |t|
@@ -203,8 +203,8 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.integer  "attempts_number", default: 0
     t.boolean  "finished",        default: false
     t.boolean  "active",          default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
   create_table "tools", force: true do |t|
@@ -212,8 +212,8 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.string   "name"
     t.string   "use"
     t.integer  "quantity"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "users", force: true do |t|
@@ -227,8 +227,8 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.string   "role"
   end
 
@@ -237,8 +237,8 @@ ActiveRecord::Schema.define(version: 20130701191639) do
 
   create_table "vehicles", force: true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
