@@ -263,6 +263,25 @@ describe ToolsController do
       end
     end
 
+    describe "when logged in but not a firefighter" do
+      before :each do
+        sign_in Fabricate(:user, role: nil)
+        @vehicle = Fabricate(:vehicle)
+        @compartments = [Fabricate(:compartment, vehicle: @vehicle),
+                         Fabricate(:compartment, vehicle: @vehicle),
+                         Fabricate(:compartment, vehicle: @vehicle),
+                         Fabricate(:compartment, vehicle: @vehicle)
+        ]
+      end
+
+      it "should not allow access to quiz" do
+        t = Fabricate(:tool, compartment: @compartments[0])
+        get :quiz
+        response.should be_redirect
+        response.should redirect_to root_path
+      end
+    end
+
     describe "when logged out" do
       it "should redirect to the login page" do
         get :quiz

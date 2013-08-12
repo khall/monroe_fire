@@ -33,6 +33,19 @@ describe VehiclesController do
       end
     end
 
+    describe "when logged in but not a firefighter" do
+      before :each do
+        sign_in Fabricate(:user, role: nil)
+      end
+
+      it "should redirect to the home page" do
+        Fabricate(:vehicle)
+        get :index
+        response.should be_redirect
+        response.should redirect_to root_path
+      end
+    end
+
     describe "when not logged in" do
       it "should redirect to the login page" do
         Fabricate(:vehicle)

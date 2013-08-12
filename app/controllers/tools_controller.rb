@@ -30,7 +30,8 @@ class ToolsController < ApplicationController
 
   def quiz
     prepare_question
-
+    authorize! :read, @tool
+    authorize! :read, @compartments
   end
 
   def quiz_answer

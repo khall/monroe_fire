@@ -2,33 +2,57 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe CompartmentsController do
   describe "index" do
-    before :each do
-      sign_in Fabricate(:user, role: :firefighter)
+    describe "when logged in" do
+      before :each do
+        sign_in Fabricate(:user, role: :firefighter)
+      end
+
+      it "should set @compartments to an empty array, render 'index', return a response of 200" do
+        get :index
+        response.should be_success
+        response.should render_template(:index)
+        assigns[:compartments].should == []
+      end
+
+      it "should set @compartments to a non-empty array, render 'index', return a response of 200" do
+        Fabricate(:compartment)
+        get :index
+        response.should be_success
+        response.should render_template(:index)
+        assigns[:compartments].length.should == 1
+      end
+
+      it "should set @compartments to an array of 3 tools, render 'index', return a response of 200" do
+        Fabricate(:compartment)
+        Fabricate(:compartment)
+        Fabricate(:compartment)
+        get :index
+        response.should be_success
+        response.should render_template(:index)
+        assigns[:compartments].length.should == 3
+      end
     end
 
-    it "should set @compartments to an empty array, render 'index', return a response of 200" do
-      get :index
-      response.should be_success
-      response.should render_template(:index)
-      assigns[:compartments].should == []
+    describe "when logged in but not a firefighter" do
+      before :each do
+        sign_in Fabricate(:user, role: nil)
+      end
+
+      it "should redirect to home page" do
+        Fabricate(:compartment)
+        get :index
+        response.should be_redirect
+        response.should redirect_to root_path
+      end
     end
 
-    it "should set @compartments to a non-empty array, render 'index', return a response of 200" do
-      Fabricate(:compartment)
-      get :index
-      response.should be_success
-      response.should render_template(:index)
-      assigns[:compartments].length.should == 1
-    end
-
-    it "should set @compartments to an array of 3 tools, render 'index', return a response of 200" do
-      Fabricate(:compartment)
-      Fabricate(:compartment)
-      Fabricate(:compartment)
-      get :index
-      response.should be_success
-      response.should render_template(:index)
-      assigns[:compartments].length.should == 3
+    describe "when not logged in" do
+      it "should redirect to home page" do
+        Fabricate(:compartment)
+        get :index
+        response.should be_redirect
+        response.should redirect_to new_user_session_path
+      end
     end
   end
 
