@@ -28,7 +28,9 @@ describe "tools/quiz" do
                       Fabricate(:compartment, vehicle: v)
       ]
       tool = Fabricate(:tool, name: 'Halligan', use: 'Skeleton key', quantity: 1, compartment: compartments[0])
+      old_tool = Fabricate(:tool, name: 'Rescue chains', use: '', quantity: 1, compartment: compartments[1])
       assign(:tool, tool)
+      assign(:old_tool, old_tool)
       assign(:compartments, compartments)
       assign(:results, {questions: 5, right: 3})
       flash[:alert] = "nope"
@@ -38,7 +40,7 @@ describe "tools/quiz" do
       rendered.should =~ /Correct: 3/
       rendered.should =~ /Percentage: 60%/
       rendered.should =~ /img/
-      rendered.should =~ /#{tool.compartment.image_src}/
+      rendered.should =~ /#{old_tool.compartment.image_src}/
     end
 
     it "doesn't display a compartment picture if answer is correct" do
@@ -75,6 +77,26 @@ describe "tools/quiz" do
       assign(:results, {questions: 5, right: 3})
       render
       rendered.should =~ /Where are the #{tool.name} on #{tool.vehicle.name}\?/
+    end
+
+    it "shows previous tool's compartment image on an incorrect answer" do
+      v = Fabricate(:vehicle)
+      compartments = [Fabricate(:compartment, vehicle: v, image_src: "cur_tool"),
+                      Fabricate(:compartment, vehicle: v),
+                      Fabricate(:compartment, vehicle: v),
+                      Fabricate(:compartment, vehicle: v)
+      ]
+      tool = Fabricate(:tool, name: 'Traffic Vests', quantity: 2, compartment: compartments[0])
+      other_compartment = Fabricate(:compartment, vehicle: v, image_src: 'old_tool')
+      old_tool = Fabricate(:tool, name: 'Traffic Cones', quantity: 8, compartment: other_compartment)
+      assign(:tool, tool)
+      assign(:old_tool, old_tool)
+      assign(:compartments, compartments)
+      assign(:results, {questions: 5, right: 3})
+      flash[:alert] = "you got that wrong"
+      render
+      rendered.should =~ /Where are the #{tool.name} on #{tool.vehicle.name}\?/
+      rendered.should =~ %r|src="/images/old_tool"|
     end
   end
 end

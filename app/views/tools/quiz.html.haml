@@ -1,5 +1,5 @@
-- if alert
-  = image_tag @tool.compartment.image_src unless @tool.compartment.image_src.blank?
+- if alert && @old_tool
+  = image_tag @old_tool.compartment.image_src unless @old_tool.compartment.image_src.blank?
 
 #results
   = "Questions: #{@results[:questions]}"

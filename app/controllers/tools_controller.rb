@@ -39,14 +39,14 @@ class ToolsController < ApplicationController
     @results[:questions] = params[:results][:questions].to_i + 1
     @results[:right] = params[:results][:right].to_i
 
-    old_tool = Tool.find(params[:id])
-    correct = old_tool.compartment == Compartment.find(params[:answer])
-    Answer.create(user_id: current_user.id, question_type: "tool_quiz", question_id: old_tool.id, correct: correct)
+    @old_tool = Tool.find(params[:id])
+    correct = @old_tool.compartment == Compartment.find(params[:answer])
+    Answer.create(user_id: current_user.id, question_type: "tool_quiz", question_id: @old_tool.id, correct: correct)
     if correct
       @results[:right] += 1
       flash.now[:notice] = "Correct!"
     else
-      flash.now[:alert] = "The #{old_tool.name} is located in the #{old_tool.compartment.description} on #{old_tool.vehicle.name}"
+      flash.now[:alert] = "The #{@old_tool.name} is located in the #{@old_tool.compartment.description} on #{@old_tool.vehicle.name}"
     end
     render :quiz
   end
