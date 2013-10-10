@@ -2,8 +2,8 @@
 
 - @vehicle.compartments.each do |c|
   .compartment
-    = image_tag c.image_src if c.image_src
     %h4= c.description
+    = image_tag c.image_src if c.image_src
     %table
       %thead
         %tr
