@@ -1,5 +1,7 @@
 %p= link_to "Return to compartments list", compartments_path
 
+= image_tag @compartment.image_src if @compartment.image_src
+
 Items in this compartment:
 %ul
   - @compartment.tools.each do |t|

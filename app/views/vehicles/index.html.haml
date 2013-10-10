@@ -2,5 +2,5 @@
   No vehicles found
 -else
   %ul
-    - @vehicles.each do |v|
+    - @vehicles.sort{|v1, v2| v1.name <=> v2.name }.each do |v|
       %li= link_to v.name, vehicle_path(v)
