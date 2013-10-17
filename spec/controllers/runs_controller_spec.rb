@@ -8,6 +8,25 @@ describe RunsController do
       response.should render_template(:index)
       assigns[:runs].should_not == nil
     end
+
+    it "should set @years as an array of integers" do
+      Fabricate(:run, date: DateTime.parse('2014/01/01 00:00:00'))
+      get :index
+      response.should be_success
+      response.should render_template(:index)
+      assigns[:runs].should_not == nil
+      assigns[:years].should == [2014]
+    end
+
+    it "should set @years as an array of integers" do
+      Fabricate(:run, date: DateTime.parse('2013/01/01 00:00:00'))
+      Fabricate(:run, date: DateTime.parse('2014/01/01 00:00:00'))
+      get :index
+      response.should be_success
+      response.should render_template(:index)
+      assigns[:runs].should_not == nil
+      assigns[:years].should == [2013, 2014]
+    end
   end
 
   describe "new" do

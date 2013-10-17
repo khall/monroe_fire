@@ -19,6 +19,33 @@ describe "runs/index" do
     rendered.should =~ /MVC/
   end
 
+  it "renders year dropdown when there is more than one year" do
+    Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2013/03/06 00:00:00'))
+    runs = [Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2014/01/01 00:00:00'))]
+    assign(:runs, runs)
+    assign(:years, [2013, 2014])
+    Time.stub(:now).and_return(Time.new('2014/01/02 15:00:00'))
+    render
+    rendered.should =~ /MVC/
+    rendered.should =~ /Year/
+    rendered.should =~ /2013/
+    rendered.should =~ /2014/
+    rendered.should =~ %r|01/01/14|
+    rendered.should_not =~ %r|03/06/13|
+  end
+
+  it "does not render year dropdown when there is only one year" do
+    runs = [Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2013/01/01 00:00:00'))]
+    assign(:runs, runs)
+    assign(:years, [2013])
+    Time.stub(:now).and_return(Time.new('2013/10/02 15:00:00'))
+    render
+    rendered.should =~ /MVC/
+    rendered.should =~ %r|01/01/13|
+    rendered.should_not =~ /Year/
+    rendered.should_not =~ /2013/
+  end
+
   describe "statistics" do
     it "figures out what day of the week has the most calls" do
       runs = [Fabricate(:run, date: DateTime.parse('2013/03/06 00:00:00')),

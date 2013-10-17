@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
 
   def method_missing(id, *args)
     # such as .firefighter? or .webmaster?
-    return role == Regexp.last_match(1) if id.id2name =~ /^(.+)\?$/
+    return self.role == Regexp.last_match(1) if id.id2name =~ /^(.+)\?$/
 
     # such as .tool_quiz_percentage
     return self.answers.question_type(Regexp.last_match(1)).percent_correct[0].percent.to_i if id.id2name =~ /^(.+)_percentage$/

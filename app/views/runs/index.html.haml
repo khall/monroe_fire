@@ -24,7 +24,12 @@
 = link_to "Add Run", new_run_path if can? :create, @runs
 
 #charts
+  - if @years.count > 1
+    %p
+      = label_tag :year_filter, "Year:"
+      = select_tag :year_filter, @years
   %p
+    = label_tag :chart_filter, "Run Type:"
     - options = options_for_select(["All"] + Run.run_types.map{|rt| rt == 'mvc' ? rt.upcase : rt.humanize})
     = select_tag :chart_filter, options
   #chart_days

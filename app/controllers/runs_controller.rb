@@ -5,6 +5,7 @@ class RunsController < ApplicationController
 
   def index
     @runs = Run.this_year
+
   end
 
   def new
