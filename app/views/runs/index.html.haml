@@ -27,7 +27,7 @@
   - if @years.count > 1
     %p
       = label_tag :year_filter, "Year:"
-      = select_tag :year_filter, @years
+      = select_tag :year_filter, options_for_select(@years)
   %p
     = label_tag :chart_filter, "Run Type:"
     - options = options_for_select(["All"] + Run.run_types.map{|rt| rt == 'mvc' ? rt.upcase : rt.humanize})

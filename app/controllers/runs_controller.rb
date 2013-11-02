@@ -5,7 +5,7 @@ class RunsController < ApplicationController
 
   def index
     @runs = Run.this_year
-
+    @years = Run.all.map{|r| r.date.year}.uniq
   end
 
   def new

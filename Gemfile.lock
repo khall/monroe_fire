@@ -61,6 +61,7 @@ GEM
       rails (~> 4.0)
       sass-rails (>= 3.1.0)
     daemons (1.1.9)
+    database_cleaner (1.2.0)
     debugger (1.6.0)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
@@ -201,6 +202,7 @@ DEPENDENCIES
   cancan
   coffee-rails
   comfortable_mexican_sofa (~> 2.0.0.beta1)
+  database_cleaner
   debugger
   devise (~> 3.0.0.rc)
   execjs

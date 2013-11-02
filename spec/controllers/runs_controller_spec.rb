@@ -20,7 +20,9 @@ describe RunsController do
 
     it "should set @years as an array of integers" do
       Fabricate(:run, date: DateTime.parse('2013/01/01 00:00:00'))
+      Fabricate(:run, date: DateTime.parse('2013/02/01 00:00:00'))
       Fabricate(:run, date: DateTime.parse('2014/01/01 00:00:00'))
+      Fabricate(:run, date: DateTime.parse('2014/02/01 00:00:00'))
       get :index
       response.should be_success
       response.should render_template(:index)

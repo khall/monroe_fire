@@ -10,6 +10,7 @@ describe "runs/index" do
             Fabricate(:run, run_type: 'mvc')
     ]
     assign(:runs, runs)
+    assign(:years, runs.map{|r| r.date.year})
     render
     rendered.should =~ /Hazmat/
     rendered.should =~ /Fire/
@@ -21,7 +22,9 @@ describe "runs/index" do
 
   it "renders year dropdown when there is more than one year" do
     Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2013/03/06 00:00:00'))
-    runs = [Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2014/01/01 00:00:00'))]
+    Fabricate(:run, run_type: 'rescue', date: DateTime.parse('2013/03/07 00:00:00'))
+    runs = [Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2014/01/01 00:00:00')),
+            Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2014/01/01 00:00:00'))]
     assign(:runs, runs)
     assign(:years, [2013, 2014])
     Time.stub(:now).and_return(Time.new('2014/01/02 15:00:00'))
@@ -32,6 +35,7 @@ describe "runs/index" do
     rendered.should =~ /2014/
     rendered.should =~ %r|01/01/14|
     rendered.should_not =~ %r|03/06/13|
+    rendered.should_not =~ %r|03/07/13|
   end
 
   it "does not render year dropdown when there is only one year" do
@@ -56,6 +60,7 @@ describe "runs/index" do
               Fabricate(:run, date: DateTime.parse('2013/03/19 00:00:00'))
       ]
       assign(:runs, runs)
+      assign(:years, [2013])
       render
       rendered.should =~ /Day of the week most likely to have calls: Wednesday/
     end
@@ -69,6 +74,7 @@ describe "runs/index" do
               Fabricate(:run, date: DateTime.parse('2013/03/11 00:00:00')),
       ]
       assign(:runs, runs)
+      assign(:years, [2013])
       render
       rendered.should =~ /Day of the week least likely to have calls: Tuesday/
     end
@@ -82,6 +88,7 @@ describe "runs/index" do
               Fabricate(:run, date: DateTime.parse('2013/03/19 00:00:00'))
       ]
       assign(:runs, runs)
+      assign(:years, [2013])
       render
       rendered.should =~ /Day of the week most likely to have calls: Tie \(Tuesday, Wednesday\)/
     end
@@ -95,6 +102,7 @@ describe "runs/index" do
               Fabricate(:run, date: DateTime.parse('2013/03/19 00:00:00'))
       ]
       assign(:runs, runs)
+      assign(:years, [2013])
       render
       rendered.should =~ /Day of the week least likely to have calls: Tie \(Monday, Friday, Saturday\)/
     end
@@ -108,6 +116,7 @@ describe "runs/index" do
               Fabricate(:run, date: DateTime.parse('2013/03/19 22:00:00'))
       ]
       assign(:runs, runs)
+      assign(:years, [2013])
       render
       rendered.should =~ /Hour of day most likely to have calls: 15:00/
     end
@@ -119,6 +128,7 @@ describe "runs/index" do
       end
 
       assign(:runs, runs)
+      assign(:years, [2013])
       render
       rendered.should =~ /Hour of day least likely to have calls: 23:00/
     end
@@ -133,6 +143,7 @@ describe "runs/index" do
               Fabricate(:run, date: DateTime.parse('2013/03/19 22:30:00'))
       ]
       assign(:runs, runs)
+      assign(:years, [2013])
       render
       rendered.should =~ /Hour of day most likely to have calls: Tie \(15:00, 22:00\)/
     end
@@ -143,6 +154,7 @@ describe "runs/index" do
         runs << Fabricate(:run, date: DateTime.parse("2013/03/13 0#{n}:00:00"))
       end
       assign(:runs, runs)
+      assign(:years, [2013])
       render
       rendered.should =~ /Hour of day least likely to have calls: Tie \(22:00, 23:00\)/
     end
@@ -151,6 +163,7 @@ describe "runs/index" do
     it "determines the average personnel response for zero runs" do
       runs = []
       assign(:runs, runs)
+      assign(:years, [])
       render
       rendered.should =~ /Average \(mean\) personnel response: 0/
     end
@@ -158,6 +171,7 @@ describe "runs/index" do
     it "determines the average personnel response for some runs" do
       runs = [Fabricate(:run, number_of_responders: 4), Fabricate(:run, number_of_responders: 7)]
       assign(:runs, runs)
+      assign(:years, runs.map{|r| r.date.year})
       render
       rendered.should =~ /Average \(mean\) personnel response: 5/
     end
@@ -166,6 +180,7 @@ describe "runs/index" do
       runs = [Fabricate(:run, date: Time.now, in_quarters_time: Time.now + 50.minutes),
               Fabricate(:run, date: Time.now, in_quarters_time: Time.now + 70.minutes)]
       assign(:runs, runs)
+      assign(:years, runs.map{|r| r.date.year})
       render
       rendered.should =~ /Total time on calls: 2 hours/
     end
@@ -173,6 +188,7 @@ describe "runs/index" do
     it "determines the total man hours on calls for zero runs" do
       runs = []
       assign(:runs, runs)
+      assign(:years, [])
       render
       rendered.should =~ /Total man hours: 0/
     end
@@ -181,6 +197,7 @@ describe "runs/index" do
       runs = [Fabricate(:run, date: Time.now, in_quarters_time: Time.now + 600.minutes, number_of_responders: 99),
               Fabricate(:run, date: Time.now, in_quarters_time: Time.now + 60.minutes, number_of_responders: 1)]
       assign(:runs, runs)
+      assign(:years, runs.map{|r| r.date.year})
       render
       rendered.should =~ /Total man hours: 991/
     end
@@ -189,6 +206,7 @@ describe "runs/index" do
       runs = [Fabricate(:run, date: Time.now, in_quarters_time: Time.now + 50.minutes, number_of_responders: 10),
               Fabricate(:run, date: Time.now, in_quarters_time: Time.now + 70.minutes, number_of_responders: 8)]
       assign(:runs, runs)
+      assign(:years, runs.map{|r| r.date.year})
       render
       rendered.should =~ /Total man hours: 17/
     end
@@ -196,6 +214,7 @@ describe "runs/index" do
     it "determines the average time to go in route for zero runs" do
       runs = []
       assign(:runs, runs)
+      assign(:years, [])
       render
       rendered.should =~ /Average \(mean\) time to go in route: 0 minutes/
     end
@@ -204,6 +223,7 @@ describe "runs/index" do
       runs = [Fabricate(:run, date: Time.now, in_route_time: Time.now + 5.minutes),
               Fabricate(:run, date: Time.now, in_route_time: Time.now + 7.minutes)]
       assign(:runs, runs)
+      assign(:years, runs.map{|r| r.date.year})
       render
       rendered.should =~ /Average \(mean\) time to go in route: 6 minutes/
     end
@@ -211,6 +231,7 @@ describe "runs/index" do
     it "determines the average time to arrive for zero runs" do
       runs = []
       assign(:runs, runs)
+      assign(:years, [])
       render
       rendered.should =~ /Average \(mean\) time to arrive: 0 minutes/
     end
@@ -219,6 +240,7 @@ describe "runs/index" do
       runs = [Fabricate(:run, date: Time.now, arrived_time: Time.now + 5.minutes),
               Fabricate(:run, date: Time.now, arrived_time: Time.now + 7.minutes)]
       assign(:runs, runs)
+      assign(:years, runs.map{|r| r.date.year})
       render
       rendered.should =~ /Average \(mean\) time to arrive: 6 minutes/
     end

@@ -36,6 +36,7 @@ gem 'jquery-rails'
 group :test do
   gem 'autotest-standalone'
   gem 'autotest-fsevent'
+  gem 'database_cleaner'
   gem 'fabrication'
   gem 'faker'
   gem 'rspec-rails'
