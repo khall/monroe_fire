@@ -29,6 +29,39 @@ describe RunsController do
       assigns[:runs].should_not == nil
       assigns[:years].should == [2013, 2014]
     end
+
+    it "filters runs on year" do
+      Fabricate(:run, date: DateTime.parse('2013/02/01 00:00:00'))
+      Fabricate(:run, date: DateTime.parse('2014/02/01 00:00:00'))
+      run1 = Fabricate(:run, date: DateTime.parse('2012/02/01 00:00:00'))
+      run2 = Fabricate(:run, date: DateTime.parse('2012/03/01 00:00:00'))
+      get :index, :year => 2012
+      response.should be_success
+      response.should render_template(:index)
+      assigns[:runs].should == [run1, run2]
+      assigns[:years].should == [2012, 2013, 2014]
+    end
+
+    it "filters runs on year with no runs" do
+      Fabricate(:run, date: DateTime.parse('2013/02/01 00:00:00'))
+      Fabricate(:run, date: DateTime.parse('2014/02/01 00:00:00'))
+      Fabricate(:run, date: DateTime.parse('2012/02/01 00:00:00'))
+      get :index, :year => 2011
+      response.should be_success
+      response.should render_template(:index)
+      assigns[:runs].should == []
+      assigns[:years].should == [2012, 2013, 2014]
+    end
+
+    it "tries to filter on a string that isn't a year" do
+      Fabricate(:run, date: DateTime.parse('2014/02/01 00:00:00'))
+      Fabricate(:run, date: DateTime.parse('2013/02/01 00:00:00'))
+      get :index, :year => 'hello'
+      response.should be_success
+      response.should render_template(:index)
+      assigns[:runs].should == []
+      assigns[:years].should == [2013, 2014]
+    end
   end
 
   describe "new" do

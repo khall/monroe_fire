@@ -1,0 +1,63 @@
+#old_days
+  - day_data = day_stats
+  %p= "Day of the week most likely to have calls: #{day_data[:most]}"
+  %p= "Day of the week least likely to have calls: #{day_data[:least]}"
+#old_hours
+  - hour_data = hour_stats
+  %p= "Hour of day most likely to have calls: #{hour_data[:most]}"
+  %p= "Hour of day least likely to have calls: #{hour_data[:least]}"
+
+%table{cellspacing: 0}
+  %thead
+    %th Date
+    %th Alarm #
+    %th Type
+    %th Total time out
+    %th # personnel responding
+    %th Response time in route
+    %th Response time to scene
+    %th Alarm time
+    %th In route
+    %th First arrived
+    %th In quarters
+  %tbody
+    - even = true
+    - count = 0
+    - total_personnel = 0
+    - total_time_out = 0
+    - total_man_minutes = 0
+    - total_in_route_time = 0
+    - total_to_scene_time = 0
+    - @runs.each do |run|
+      - count += 1
+      - total_personnel += run.number_of_responders
+      - total_time_out += run.total_time_out
+      - total_man_minutes += run.total_time_out * run.number_of_responders
+      - total_in_route_time += run.minutes_in_route
+      - total_to_scene_time += run.minutes_to_scene
+      - even = !even
+      %tr{class: even ? "even_row": ""}
+        %td= run.date.strftime('%D')
+        %td= run.alarm_number
+        %td= run.run_type == 'mvc' ? run.run_type.upcase : run.run_type.humanize
+        %td= pretty_time run.total_time_out
+        %td= run.number_of_responders
+        %td= pretty_time run.minutes_in_route
+        %td= pretty_time run.minutes_to_scene
+        %td= run.date.strftime('%R')
+        %td= run.in_route_time.strftime('%R')
+        %td= run.arrived_time.strftime('%R')
+        %td= run.in_quarters_time.strftime('%R')
+.summary
+  %p= "Average (mean) personnel response: #{count == 0 ? 0 : total_personnel / count}"
+  %p= "Total time on calls: #{total_time_out / 60} hours"
+  %p= "Total man hours: #{total_man_minutes / 60}"
+  %p= "Average (mean) time to go in route: #{count == 0 ? 0 : total_in_route_time / count} minutes"
+  %p= "Average (mean) time to arrive: #{count == 0 ? 0 : total_to_scene_time / count} minutes"
+
+#all_data.js_interface
+  = raw @runs.map{|r| {run_type: r.run_type, weekday: r.date.wday, hour: r.date.to_time.hour}}.to_json
+#day_data.js_interface
+  = raw @unsorted_day_stats.to_json
+#hour_data.js_interface
+  = raw @unsorted_hour_stats.to_json
