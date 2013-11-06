@@ -54,6 +54,9 @@
   %p= "Total man hours: #{total_man_minutes / 60}"
   %p= "Average (mean) time to go in route: #{count == 0 ? 0 : total_in_route_time / count} minutes"
   %p= "Average (mean) time to arrive: #{count == 0 ? 0 : total_to_scene_time / count} minutes"
+  - if @old_runs
+    %p= "Projected annual calls: #{projected_runs(@runs)}"
+    %p= "Projected call trend: #{projected_trend(@old_runs, @new_runs_count)}"
 
 #all_data.js_interface
   = raw @runs.map{|r| {run_type: r.run_type, weekday: r.date.wday, hour: r.date.to_time.hour}}.to_json

@@ -4,10 +4,12 @@ class RunsController < ApplicationController
   EXCEL_ROWS = 11
 
   def index
-    if params[:year_filter]
-      @runs = Run.year(params[:year_filter])
-    else
+    if !params[:year_filter] || params[:year_filter] == Time.now.year
+      @old_runs = Run.older_than(SHORT_TERM_RUNS)
+      @new_runs_count = Run.newer_than(SHORT_TERM_RUNS).count
       @runs = Run.this_year
+    else
+      @runs = Run.year(params[:year_filter])
     end
     @years = Run.all.map{|r| r.date.year}.uniq.sort
   end

@@ -56,4 +56,31 @@ module RunHelper
     end
     list
   end
+
+  def projected_runs(runs)
+    days_this_year = Time.now.strftime("%j").to_f
+    ((runs.length / days_this_year) * 365).to_i
+  end
+
+  def projected_trend(runs, number_recent_runs)
+    day_of_year = (Time.now - SHORT_TERM_RUNS.days).strftime("%j").to_f
+    rate = runs.length / day_of_year
+    trend = (number_recent_runs - (SHORT_TERM_RUNS * rate)).to_i
+    str = if trend == 0
+      "Flat, expect a similar amount of calls"
+    elsif trend < 0 && trend >= -3
+      "Slight increase"
+    elsif trend < -3 && trend >= -6
+      "Moderate increase"
+    elsif trend < -6
+      "Significant increase"
+    elsif trend > 0 && trend <= 3
+      "Slight decrease"
+    elsif trend > 3 && trend <= 6
+      "Moderate decrease"
+    elsif trend > 6
+      "Significant decrease"
+    end
+    str += " (Trend value: #{trend})"
+  end
 end

@@ -27,7 +27,7 @@ describe "runs/index" do
             Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2014/01/01 00:00:00'))]
     assign(:runs, runs)
     assign(:years, [2013, 2014])
-    Time.stub(:now).and_return(Time.new('2014/01/02 15:00:00'))
+    Time.stub(:now).and_return(Time.parse('2014/01/02 15:00:00'))
     render
     rendered.should =~ /MVC/
     rendered.should =~ /Year/
@@ -42,7 +42,7 @@ describe "runs/index" do
     runs = [Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2013/01/01 00:00:00'))]
     assign(:runs, runs)
     assign(:years, [2013])
-    Time.stub(:now).and_return(Time.new('2013/10/02 15:00:00'))
+    Time.stub(:now).and_return(Time.parse('2013/10/02 15:00:00'))
     render
     rendered.should =~ /MVC/
     rendered.should =~ %r|01/01/13|
@@ -211,38 +211,53 @@ describe "runs/index" do
       rendered.should =~ /Total man hours: 17/
     end
 
-    it "determines the average time to go in route for zero runs" do
-      runs = []
-      assign(:runs, runs)
-      assign(:years, [])
-      render
-      rendered.should =~ /Average \(mean\) time to go in route: 0 minutes/
+    describe "average time" do
+      it "determines the average time to go in route for zero runs" do
+        runs = []
+        assign(:runs, runs)
+        assign(:years, [])
+        render
+        rendered.should =~ /Average \(mean\) time to go in route: 0 minutes/
+      end
+
+      it "determines the average time to go in route for some runs" do
+        runs = [Fabricate(:run, date: Time.now, in_route_time: Time.now + 5.minutes),
+                Fabricate(:run, date: Time.now, in_route_time: Time.now + 7.minutes)]
+        assign(:runs, runs)
+        assign(:years, runs.map{|r| r.date.year})
+        render
+        rendered.should =~ /Average \(mean\) time to go in route: 6 minutes/
+      end
+
+      it "determines the average time to arrive for zero runs" do
+        runs = []
+        assign(:runs, runs)
+        assign(:years, [])
+        render
+        rendered.should =~ /Average \(mean\) time to arrive: 0 minutes/
+      end
+
+      it "determines the average time to arrive for some runs" do
+        runs = [Fabricate(:run, date: Time.now, arrived_time: Time.now + 5.minutes),
+                Fabricate(:run, date: Time.now, arrived_time: Time.now + 7.minutes)]
+        assign(:runs, runs)
+        assign(:years, runs.map{|r| r.date.year})
+        render
+        rendered.should =~ /Average \(mean\) time to arrive: 6 minutes/
+      end
     end
 
-    it "determines the average time to go in route for some runs" do
-      runs = [Fabricate(:run, date: Time.now, in_route_time: Time.now + 5.minutes),
-              Fabricate(:run, date: Time.now, in_route_time: Time.now + 7.minutes)]
-      assign(:runs, runs)
-      assign(:years, runs.map{|r| r.date.year})
-      render
-      rendered.should =~ /Average \(mean\) time to go in route: 6 minutes/
+    describe "likelihood for a call" do
+      it "" do
+
+      end
     end
 
-    it "determines the average time to arrive for zero runs" do
-      runs = []
-      assign(:runs, runs)
-      assign(:years, [])
-      render
-      rendered.should =~ /Average \(mean\) time to arrive: 0 minutes/
-    end
-
-    it "determines the average time to arrive for some runs" do
-      runs = [Fabricate(:run, date: Time.now, arrived_time: Time.now + 5.minutes),
-              Fabricate(:run, date: Time.now, arrived_time: Time.now + 7.minutes)]
-      assign(:runs, runs)
-      assign(:years, runs.map{|r| r.date.year})
-      render
-      rendered.should =~ /Average \(mean\) time to arrive: 6 minutes/
+    describe "projected runs this year" do
+      it "estimates 365 runs on January 1 when there's been one call" do
+        Fabricate(:run, date: Time.parse('2013/01/01 12:00:00'))
+        Time.stub(:now).and_return(Time.parse('2013/01/01 15:00:00'))
+      end
     end
   end
 end

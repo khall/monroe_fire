@@ -5,6 +5,8 @@ class Run < ActiveRecord::Base
   scope :alarm_number, -> (alarm_number) { where("alarm_number = #{alarm_number}") }
   scope :this_year, -> { where("date >= '#{Time.now.beginning_of_year}' AND date <= '#{Time.now.end_of_year}'").order("alarm_number ASC") }
   scope :year, -> (year) { where("date >= '#{Time.parse("#{year}/01/01 00:00:00")}' AND date < '#{Time.parse("#{year.to_i + 1}/01/01 00:00:00")}'").order("alarm_number ASC")}
+  scope :older_than, -> (num_days) { where("date <= '#{Time.now - num_days.days}'")}
+  scope :newer_than, -> (num_days) { where("date >= '#{Time.now - num_days.days}'")}
 
   def total_time_out
     ((in_quarters_time - date) / 60).to_i

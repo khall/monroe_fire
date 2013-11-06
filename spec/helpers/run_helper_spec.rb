@@ -43,4 +43,67 @@ describe RunHelper do
   #    html.should =~ //
   #  end
   #end
+
+  describe "projected_trend" do
+    # (calls to date (30) - calls in previous 10 days (30)) / (day of year - 10)
+    # 30 / 30 = 1 call per day
+    # short-term projection is that we are behind ten calls
+    it "determines that few calls have been coming in lately and rates the trend as being up" do
+      runs = []
+      (1..31).each do |n|
+        runs << Fabricate(:run, date: Time.parse("2013/01/#{n.to_s.rjust(1, '0')} 15:00:00"))
+      end
+      Time.stub(:now).and_return(Time.parse('2013/02/10 16:00:00'))
+      trend = helper.projected_trend(runs, 0)
+      trend.should == "Significant increase (Trend value: -10)"
+    end
+
+    it "determines that lots of calls have been coming in lately and rates the trend as being down" do
+      runs = []
+      (1..30).each do |n|
+        next unless n % 5 == 0
+        runs << Fabricate(:run, date: Time.parse("2013/01/#{n.to_s.rjust(1, '0')} 15:00:00"))
+      end
+      #(1..10).each do |n|
+      #  runs << Fabricate(:run, date: Time.parse("2013/02/#{n.to_s.rjust(1, '0')} 15:00:00"))
+      #end
+      Time.stub(:now).and_return(Time.parse('2013/02/10 16:00:00'))
+      trend = helper.projected_trend(runs, 10)
+      trend.should == "Significant decrease (Trend value: 8)"
+    end
+  end
+
+  describe "projected_runs" do
+    it "estimates 365 runs on January 1 when there's been one call" do
+      runs = [Fabricate(:run, date: Time.parse('2013/01/01 12:00:00'))]
+      Time.stub(:now).and_return(Time.parse('2013/01/01 15:00:00'))
+      projected_runs = helper.projected_runs(runs)
+      projected_runs.should == 365
+    end
+
+    it "estimates 730 runs on January 1 when there have been two calls" do
+      runs = [Fabricate(:run, date: Time.parse('2013/01/01 12:00:00')),
+              Fabricate(:run, date: Time.parse('2013/01/01 15:00:00'))
+      ]
+      Time.stub(:now).and_return(Time.parse('2013/01/01 16:00:00'))
+      projected_runs = helper.projected_runs(runs)
+      projected_runs.should == 730
+    end
+
+    it "estimates 30 runs on January 12 when there's been one call" do
+      runs = [Fabricate(:run, date: Time.parse('2013/01/01 12:00:00'))
+      ]
+      Time.stub(:now).and_return(Time.parse('2013/01/12 16:00:00'))
+      projected_runs = helper.projected_runs(runs)
+      projected_runs.should == 30
+    end
+
+    it "estimates 12 runs on January 30 when there's been one call" do
+      runs = [Fabricate(:run, date: Time.parse('2013/01/01 12:00:00'))
+      ]
+      Time.stub(:now).and_return(Time.parse('2013/01/30 16:00:00'))
+      projected_runs = helper.projected_runs(runs)
+      projected_runs.should == 12
+    end
+  end
 end
