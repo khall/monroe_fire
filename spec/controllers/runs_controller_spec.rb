@@ -7,15 +7,19 @@ describe RunsController do
       response.should be_success
       response.should render_template(:index)
       assigns[:runs].should_not == nil
+      assigns[:years].should == []
     end
 
     it "should set @years as an array of integers" do
       Fabricate(:run, date: DateTime.parse('2014/01/01 00:00:00'))
+      Time.stub(:now).and_return(Time.parse('2014/01/10 16:00:00'))
       get :index
       response.should be_success
       response.should render_template(:index)
       assigns[:runs].should_not == nil
       assigns[:years].should == [2014]
+      assigns[:num_old_runs].should == 0
+      assigns[:num_new_runs].should == 1
     end
 
     it "should set @years as an array of integers" do
@@ -23,11 +27,14 @@ describe RunsController do
       Fabricate(:run, date: DateTime.parse('2013/02/01 00:00:00'))
       Fabricate(:run, date: DateTime.parse('2014/01/01 00:00:00'))
       Fabricate(:run, date: DateTime.parse('2014/02/01 00:00:00'))
+      Time.stub(:now).and_return(Time.parse('2014/02/10 16:00:00'))
       get :index
       response.should be_success
       response.should render_template(:index)
       assigns[:runs].should_not == nil
       assigns[:years].should == [2013, 2014]
+      assigns[:num_old_runs].should == 1
+      assigns[:num_new_runs].should == 1
     end
 
     it "filters runs on year" do
@@ -35,18 +42,21 @@ describe RunsController do
       Fabricate(:run, date: DateTime.parse('2014/02/01 00:00:00'))
       run1 = Fabricate(:run, date: DateTime.parse('2012/02/01 00:00:00'))
       run2 = Fabricate(:run, date: DateTime.parse('2012/03/01 00:00:00'))
-      get :index, :year => 2012
+      Time.stub(:now).and_return(Time.parse('2014/02/10 16:00:00'))
+      get :index, :year_filter => 2012
       response.should be_success
       response.should render_template(:index)
       assigns[:runs].should == [run1, run2]
       assigns[:years].should == [2012, 2013, 2014]
+      assigns[:num_old_runs].should_not == 3
+      assigns[:num_new_runs].should_not == 1
     end
 
     it "filters runs on year with no runs" do
       Fabricate(:run, date: DateTime.parse('2013/02/01 00:00:00'))
       Fabricate(:run, date: DateTime.parse('2014/02/01 00:00:00'))
       Fabricate(:run, date: DateTime.parse('2012/02/01 00:00:00'))
-      get :index, :year => 2011
+      get :index, :year_filter => 2011
       response.should be_success
       response.should render_template(:index)
       assigns[:runs].should == []
@@ -56,7 +66,7 @@ describe RunsController do
     it "tries to filter on a string that isn't a year" do
       Fabricate(:run, date: DateTime.parse('2014/02/01 00:00:00'))
       Fabricate(:run, date: DateTime.parse('2013/02/01 00:00:00'))
-      get :index, :year => 'hello'
+      get :index, :year_filter => 'hello'
       response.should be_success
       response.should render_template(:index)
       assigns[:runs].should == []

@@ -49,26 +49,14 @@ describe RunHelper do
     # 30 / 30 = 1 call per day
     # short-term projection is that we are behind ten calls
     it "determines that few calls have been coming in lately and rates the trend as being up" do
-      runs = []
-      (1..31).each do |n|
-        runs << Fabricate(:run, date: Time.parse("2013/01/#{n.to_s.rjust(1, '0')} 15:00:00"))
-      end
       Time.stub(:now).and_return(Time.parse('2013/02/10 16:00:00'))
-      trend = helper.projected_trend(runs, 0)
+      trend = helper.projected_trend(31, 0)
       trend.should == "Significant increase (Trend value: -10)"
     end
 
     it "determines that lots of calls have been coming in lately and rates the trend as being down" do
-      runs = []
-      (1..30).each do |n|
-        next unless n % 5 == 0
-        runs << Fabricate(:run, date: Time.parse("2013/01/#{n.to_s.rjust(1, '0')} 15:00:00"))
-      end
-      #(1..10).each do |n|
-      #  runs << Fabricate(:run, date: Time.parse("2013/02/#{n.to_s.rjust(1, '0')} 15:00:00"))
-      #end
       Time.stub(:now).and_return(Time.parse('2013/02/10 16:00:00'))
-      trend = helper.projected_trend(runs, 10)
+      trend = helper.projected_trend(6, 10)
       trend.should == "Significant decrease (Trend value: 8)"
     end
   end
