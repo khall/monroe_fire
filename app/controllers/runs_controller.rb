@@ -5,7 +5,7 @@ class RunsController < ApplicationController
 
   def index
     if !params[:year_filter] || params[:year_filter] == Time.now.year
-      @num_old_runs = Run.this_year.older_than(SHORT_TERM_RUNS).count
+      @num_old_runs = Run.this_year.older_than(SHORT_TERM_RUNS).newer_than(TREND_SPACING_PERIOD).count
       @num_new_runs = Run.newer_than(SHORT_TERM_RUNS).count
       @runs = Run.this_year
     else

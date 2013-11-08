@@ -63,9 +63,8 @@ module RunHelper
   end
 
   def projected_trend(num_old_runs, num_recent_runs)
-    day_of_year = (Time.now - SHORT_TERM_RUNS.days).strftime("%j").to_f
-    rate = num_old_runs / day_of_year
-    trend = (num_recent_runs - (SHORT_TERM_RUNS * rate)).to_i
+    rate = num_old_runs / (TREND_SPACING_PERIOD - SHORT_TERM_RUNS).to_f
+    trend = (num_recent_runs - (SHORT_TERM_RUNS * rate)).round
     str = if trend == 0
       "Flat, expect a similar amount of calls"
     elsif trend < 0 && trend >= -3

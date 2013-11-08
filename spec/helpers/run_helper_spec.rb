@@ -50,14 +50,14 @@ describe RunHelper do
     # short-term projection is that we are behind ten calls
     it "determines that few calls have been coming in lately and rates the trend as being up" do
       Time.stub(:now).and_return(Time.parse('2013/02/10 16:00:00'))
-      trend = helper.projected_trend(31, 0)
-      trend.should == "Significant increase (Trend value: -10)"
+      trend = helper.projected_trend(30, 0)
+      trend.should == "Significant increase (Trend value: -15)"
     end
 
     it "determines that lots of calls have been coming in lately and rates the trend as being down" do
       Time.stub(:now).and_return(Time.parse('2013/02/10 16:00:00'))
-      trend = helper.projected_trend(6, 10)
-      trend.should == "Significant decrease (Trend value: 8)"
+      trend = helper.projected_trend(10, 10)
+      trend.should == "Significant decrease (Trend value: 7)"
     end
   end
 
