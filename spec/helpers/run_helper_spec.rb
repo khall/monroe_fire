@@ -56,8 +56,8 @@ describe RunHelper do
 
     it "determines that lots of calls have been coming in lately and rates the trend as being down" do
       Time.stub(:now).and_return(Time.parse('2013/02/10 16:00:00'))
-      trend = helper.projected_trend(10, 10)
-      trend.should == "Significant decrease (Trend value: 7)"
+      trend = helper.projected_trend(5, 10)
+      trend.should == "Significant decrease (Trend value: 8)"
     end
   end
 
