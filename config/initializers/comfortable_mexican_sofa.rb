@@ -123,10 +123,12 @@ module CmsPagesAuth
   def authenticate
     if @cms_page.categories.map(&:label).include?("Restricted") && (current_user.nil? || !current_user.firefighter?)
       session["user_return_to"] = request.path
-      flash[:alert] = I18n.translate('devise.failure.unauthenticated')
+
       if !current_user.firefighter?
+        flash[:alert] = "Please contact the webmaster to get approved as a firefighter. If you're not a firefighter, your user account is useless. Sorry!"
         redirect_to root_path
       else
+        flash[:alert] = I18n.translate('devise.failure.unauthenticated')
         redirect_to new_user_session_path
       end
     end
