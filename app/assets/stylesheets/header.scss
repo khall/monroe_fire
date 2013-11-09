@@ -6,7 +6,7 @@
 
   .navbar {
     padding: 0;
-    margin-top: 0;
+    margin: 0;
     background-color: $monroe_blue;
 
     a {
@@ -31,6 +31,15 @@
 
     li:hover {
       background-color: $blue;
+    }
+  }
+
+  .logged_in {
+    background-color: gray;
+
+    li:hover {
+      background-color: lightgray;
+      color: black;
     }
   }
 }
