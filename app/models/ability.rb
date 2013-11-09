@@ -42,6 +42,7 @@ class Ability
       cannot :read, Tool
       cannot :read, Compartment
       cannot :read, Vehicle
+      cannot :read, User
     end
   end
 end
