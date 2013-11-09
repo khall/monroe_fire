@@ -8,8 +8,12 @@ class User < ActiveRecord::Base
 
   has_many :answers
 
+  def firefighter?
+    role == 'chief' || role == 'webmaster' || role == 'firefighter'
+  end
+
   def method_missing(id, *args)
-    # such as .firefighter? or .webmaster?
+    # such as .chief? or .webmaster?
     return self.role == Regexp.last_match(1) if id.id2name =~ /^(.+)\?$/
 
     # such as .tool_quiz_percentage
