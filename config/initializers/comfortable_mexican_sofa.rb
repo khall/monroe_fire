@@ -124,7 +124,11 @@ module CmsPagesAuth
     if @cms_page.categories.map(&:label).include?("Restricted") && (current_user.nil? || !current_user.firefighter?)
       session["user_return_to"] = request.path
       flash[:alert] = I18n.translate('devise.failure.unauthenticated')
-      redirect_to new_user_session_path
+      if !current_user.firefighter?
+        redirect_to root_path
+      else
+        redirect_to new_user_session_path
+      end
     end
   end
 end
