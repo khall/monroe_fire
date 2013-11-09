@@ -124,7 +124,7 @@ module CmsPagesAuth
     if @cms_page.categories.map(&:label).include?("Restricted") && (current_user.nil? || !current_user.firefighter?)
       session["user_return_to"] = request.path
 
-      if !current_user.firefighter?
+      if current_user && !current_user.firefighter?
         flash[:alert] = "Please contact the webmaster to get approved as a firefighter. If you're not a firefighter, your user account is useless. Sorry!"
         redirect_to root_path
       else
