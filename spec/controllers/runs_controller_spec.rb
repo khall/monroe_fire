@@ -75,17 +75,38 @@ describe RunsController do
   end
 
   describe "new" do
-    it "should render 'new', return response of 200" do
+    it "allows chief to access page, renders 'new', returns response of 200" do
       sign_in Fabricate(:user, role: :chief)
       get :new
       response.should be_success
       response.should render_template(:new)
     end
 
-    it "should redirect to root" do
+    it "redirects to root for a non-user" do
       get :new
       response.should be_redirect
       response.should redirect_to new_user_session_path
+    end
+
+    it "allows webmaster to access new run page" do
+      sign_in Fabricate(:user, role: :webmaster)
+      get :new
+      response.should be_success
+      response.should render_template(:new)
+    end
+
+    it "does not allow a firefighter to access new run page" do
+      sign_in Fabricate(:user, role: :firefighter)
+      get :new
+      response.should be_redirect
+      response.should redirect_to root_path
+    end
+
+    it "does not allow a user without a role to access new run page" do
+      sign_in Fabricate(:user, role: nil)
+      get :new
+      response.should be_redirect
+      response.should redirect_to root_path
     end
   end
 

@@ -30,13 +30,13 @@ class Ability
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
 
     user ||= User.new
-    if user.firefighter?
-      can :read, :all
-    elsif user.chief?
-      can :manage, Run
-    elsif user.webmaster?
+    if user.webmaster?
       can :manage, :all
       can :create, User
+    elsif user.chief?
+      can :manage, Run
+    elsif user.firefighter?
+      can :read, :all
     else # not logged in
       can :read, :all
       cannot :read, Tool
