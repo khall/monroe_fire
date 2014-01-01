@@ -31,7 +31,7 @@ describe "runs/index" do
     rendered.should =~ /MVC/
     rendered.should =~ /Year/
     rendered.should =~ /2013/
-    rendered.should =~ /2014/
+    rendered.should =~ /selected="selected" value="2014"/
     rendered.should_not =~ %r|03/06/13|
     rendered.should_not =~ %r|03/07/13|
   end
