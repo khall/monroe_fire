@@ -11,7 +11,7 @@ class RunsController < ApplicationController
     else
       @runs = Run.year(params[:year_filter])
     end
-    @years = Run.all.map{|r| r.date.year}.uniq.sort
+    @years = (Run.all.map{|r| r.date.year} + [Time.now.year]).uniq.sort
   end
 
   def new

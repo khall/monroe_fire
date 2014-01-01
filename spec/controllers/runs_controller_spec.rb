@@ -7,7 +7,7 @@ describe RunsController do
       response.should be_success
       response.should render_template(:index)
       assigns[:runs].should_not == nil
-      assigns[:years].should == []
+      assigns[:years].should == [Time.now.year]
     end
 
     it "should set @years as an array of integers" do

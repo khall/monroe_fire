@@ -20,14 +20,30 @@ describe "runs/index" do
     rendered.should =~ /MVC/
   end
 
-  it "renders year dropdown when there is more than one year" do
+  it "renders year dropdown when there is only 2013 runs but it is 2014" do
+    Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2013/03/06 00:00:00'))
+    Fabricate(:run, run_type: 'rescue', date: DateTime.parse('2013/03/07 00:00:00'))
+    runs = []
+    assign(:runs, runs)
+    assign(:years, [2013, 2014])
+    Time.stub(:now).and_return(Time.parse('2014/01/02 15:00:00'))
+    render
+    rendered.should =~ /MVC/
+    rendered.should =~ /Year/
+    rendered.should =~ /2013/
+    rendered.should =~ /2014/
+    rendered.should_not =~ %r|03/06/13|
+    rendered.should_not =~ %r|03/07/13|
+  end
+
+  it "renders year dropdown when there is more than one year for runs" do
     Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2013/03/06 00:00:00'))
     Fabricate(:run, run_type: 'rescue', date: DateTime.parse('2013/03/07 00:00:00'))
     runs = [Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2014/01/01 00:00:00')),
             Fabricate(:run, run_type: 'mvc', date: DateTime.parse('2014/01/01 00:00:00'))]
     assign(:runs, runs)
     assign(:years, [2013, 2014])
-    Time.stub(:now).and_return(Time.parse('2014/01/02 15:00:00'))
+    Time.stub(:now).and_return(Time.parse('2013/12/31 15:00:00'))
     render
     rendered.should =~ /MVC/
     rendered.should =~ /Year/
