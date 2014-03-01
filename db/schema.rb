@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130701191639) do
+ActiveRecord::Schema.define(version: 20140301051604) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,14 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.boolean  "correct"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+  end
+
+  create_table "certifications", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "course_id"
+    t.string   "progress"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "cms_blocks", force: true do |t|
@@ -150,6 +158,12 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.string   "image_src"
   end
 
+  create_table "courses", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "runs", force: true do |t|
     t.datetime "date"
     t.integer  "alarm_number"
@@ -230,6 +244,7 @@ ActiveRecord::Schema.define(version: 20130701191639) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "role"
+    t.string   "name"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

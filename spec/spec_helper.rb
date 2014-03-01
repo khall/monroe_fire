@@ -46,6 +46,7 @@ RSpec.configure do |config|
 end
 
 begin
+  ::Rails.logger.error "OMGOMGOMG" #
   Fabricate(:user) # TODO: rails 4 fabrication workaround...??? Remove this.
 rescue
 end

@@ -1,0 +1,10 @@
+= simple_form_for @run do |f|
+  = f.input :date
+  = f.input :alarm_number
+  = f.input :run_type
+  = f.input :number_of_responders
+  = f.input :time_out, label: "Time toned out"
+  = f.input :in_route_time
+  = f.input :arrived_time
+  = f.input :in_quarters_time
+  = f.button :submit

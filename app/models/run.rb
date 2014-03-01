@@ -1,6 +1,6 @@
 class Run < ActiveRecord::Base
   validates_presence_of :date, :alarm_number, :run_type, :number_of_responders, :time_out, :in_route_time, :arrived_time, :in_quarters_time
-  validate :unique_alarm_number_in_year
+  validate :unique_alarm_number_in_year, on: :create
 
   scope :alarm_number, -> (alarm_number) { where("alarm_number = #{alarm_number}") }
   scope :this_year, -> { where("date >= '#{Time.now.beginning_of_year}' AND date <= '#{Time.now.end_of_year}'").order("alarm_number ASC") }

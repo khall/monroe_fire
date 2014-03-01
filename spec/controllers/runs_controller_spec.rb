@@ -221,4 +221,53 @@ describe RunsController do
       flash[:notice].should == "Run added"
     end
   end
+
+  describe "edit" do
+    before(:each) do
+      sign_in Fabricate(:user, role: :chief)
+    end
+
+    it "should render an edit page for a run" do
+      r = Fabricate(:run)
+      get :edit, id: r
+      response.should be_success
+      response.should render_template(:edit)
+    end
+
+    it "does not allow a user without a role to access new run page" do
+      r = Fabricate(:run)
+      sign_in Fabricate(:user, role: nil)
+      get :edit, id: r
+      response.should be_redirect
+      response.should redirect_to root_path
+    end
+  end
+
+  describe "update" do
+    before(:each) do
+      sign_in Fabricate(:user, role: :chief)
+    end
+
+    it "should update a run and redirect to the index" do
+      r = Fabricate(:run)
+      put :update, id: r, run: {number_of_responders: 16}
+      response.should redirect_to(runs_path)
+      Run.find(r.id).number_of_responders.should == 16
+    end
+
+    it "should update a run and redirect to the index" do
+      r = Fabricate(:run)
+      put :update, id: r, run: {alarm_number: 160}
+      response.should redirect_to(runs_path)
+      Run.find(r.id).alarm_number.should == 160
+    end
+
+    it "does not allow a user without a role to access new run page" do
+      r = Fabricate(:run)
+      sign_in Fabricate(:user, role: nil)
+      put :update, id: r, run: {number_of_responders: 16}
+      response.should be_redirect
+      response.should redirect_to root_path
+    end
+  end
 end

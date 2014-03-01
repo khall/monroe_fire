@@ -75,5 +75,13 @@ describe Run do
       r.errors.messages.length.should > 0
       Run.all.length.should == 1
     end
+
+    it "allows updates to existing runs" do
+      r = Fabricate(:run, run_type: "fire", alarm_number: 100)
+      r.run_type = "hazmat"
+      r.valid?.should == true
+      r.save
+      Run.find(r.id).run_type.should == "hazmat"
+    end
   end
 end

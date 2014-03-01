@@ -42,3 +42,18 @@ table {
     background-color: $even_row;
   }
 }
+
+table.certifications {
+  border: 1px;
+  td.complete {
+    background-color: green;
+  }
+  td.in-progress {
+    background-color: yellow;
+  }
+  td a {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}

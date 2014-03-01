@@ -7,6 +7,10 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :answers
+  has_many :certifications
+  has_many :courses, through: :certifications
+
+  scope :firefighters, -> { where("role = 'firefighter' OR role = 'chief' OR role = 'webmaster'") }
 
   def firefighter?
     role == 'chief' || role == 'webmaster' || role == 'firefighter'
@@ -24,5 +28,16 @@ class User < ActiveRecord::Base
 
     #raise NoMethodError, "method: #{id.id2name}"
     logger.warn "No user method: #{id.id2name}"
+  end
+
+  def certified_list
+    all_certs = Certification.all
+    certifications.each do |mine|
+      all_certs.each do |cert|
+        all_certs = mine if cert.id == mine.id
+      end
+    end
+    byebug
+    list.sort(&:id)
   end
 end

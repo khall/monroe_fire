@@ -1,0 +1,24 @@
+%table.certifications
+  %tr
+    %td Firefighter
+    - @courses.each do |c|
+      %td= c.name
+  - @users.each do |u|
+    - certs = u.certifications
+    %tr
+      %td= u.name
+      - @courses.each do |course|
+        - cert = certs.detect{|c| c.course_id == course.id }
+        - if cert
+          - if cert.complete?
+            %td.cert.complete
+              = link_to("", "certification/#{cert.id}?user_id=#{u.id}", method: :patch)
+          - elsif cert.in_progress?
+            %td.cert.in-progress
+              = link_to("", "certification/#{cert.id}?user_id=#{u.id}", method: :patch)
+          - else
+            %td.cert.incomplete
+              = link_to("", "certification/create", method: :post, data: {user: u, course: course})
+        - else
+          %td.cert.incomplete
+            = link_to("", "certification/create", method: :post, data: {user: u, course: course})

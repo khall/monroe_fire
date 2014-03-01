@@ -55,7 +55,7 @@ describe User do
   end
 
   describe "tool_quiz_correct" do
-    it "should return 2 for2 right 1 wrong" do
+    it "should return 2 for 2 right 1 wrong" do
       u = Fabricate(:user, role: 'firefighter')
       Fabricate(:answer, user: u, question_type: "tool_quiz", correct: true)
       Fabricate(:answer, user: u, question_type: "tool_quiz", correct: true)

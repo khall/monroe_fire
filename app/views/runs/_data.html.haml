@@ -50,10 +50,16 @@
         %td= run.in_quarters_time.strftime('%R')
 .summary
   %p= "Average (mean) personnel response: #{count == 0 ? 0 : total_personnel / count}"
+  %p= "Average (median) personnel response: #{count == 0 ? 0 : @runs.map(&:number_of_responders).sort[(@runs.length / 2.0).to_i]}"
+  %p= "Average (mode) personnel response: #{count == 0 ? 0 : @runs.map(&:number_of_responders).group_by{|r| r}.values.max_by(&:size).first}"
   %p= "Total time on calls: #{total_time_out / 60} hours"
   %p= "Total man hours: #{total_man_minutes / 60}"
   %p= "Average (mean) time to go in route: #{count == 0 ? 0 : total_in_route_time / count} minutes"
+  %p= "Average (median) time to go in route: #{count == 0 ? 0 : @runs.map(&:minutes_in_route).sort[(@runs.length / 2.0).to_i]}"
+  %p= "Average (mode) time to go in route: #{count == 0 ? 0 : @runs.map(&:minutes_in_route).group_by{|r| r}.values.max_by(&:size).first}"
   %p= "Average (mean) time to arrive: #{count == 0 ? 0 : total_to_scene_time / count} minutes"
+  %p= "Average (median) time to arrive: #{count == 0 ? 0 : @runs.map(&:minutes_to_scene).sort[(@runs.length / 2.0).to_i]}"
+  %p= "Average (mode) time to arrive: #{count == 0 ? 0 : @runs.map(&:minutes_to_scene).group_by{|r| r}.values.max_by(&:size).first}"
   - if @num_old_runs
     %p= "Projected annual calls: #{projected_runs(@runs)}"
     %p= "Projected call trend: #{projected_trend(@num_old_runs, @num_new_runs)}"

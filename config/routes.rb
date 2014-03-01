@@ -1,8 +1,9 @@
 Fire::Application.routes.draw do
   devise_for :users
 
+  resources :certifications, only: [:index]
   resources :compartments, only: [:index, :edit, :update]
-  resources :runs, only: [:index, :new, :create]
+  resources :runs, only: [:index, :new, :create, :edit, :update]
   resources :tools, only: [:index, :show, :edit, :update] do
     collection do
       get :quiz

@@ -1,5 +1,5 @@
 class RunsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
   load_and_authorize_resource
   EXCEL_ROWS = 11
 
@@ -44,6 +44,14 @@ class RunsController < ApplicationController
     end
 
     render :new
+  end
+
+  def edit
+  end
+
+  def update
+    @run.update_attributes(run_params)
+    redirect_to runs_path
   end
 
   private
@@ -91,6 +99,6 @@ class RunsController < ApplicationController
   end
 
   def run_params
-    params.require(:runs).permit(:date, :alarm_number, :run_type, :number_of_responders, :time_out, :in_route_time, :arrived_time, :in_quarters_time)
+    params.require(:run).permit(:date, :alarm_number, :run_type, :number_of_responders, :time_out, :in_route_time, :arrived_time, :in_quarters_time)
   end
 end
