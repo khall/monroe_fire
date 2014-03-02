@@ -1,7 +1,15 @@
 Fire::Application.routes.draw do
   devise_for :users
 
-  resources :certifications, only: [:index]
+  resources :certifications, only: [:index] do
+    collection do
+      put :gen
+    end
+
+    member do
+      put :update_progress
+    end
+  end
   resources :compartments, only: [:index, :edit, :update]
   resources :runs, only: [:index, :new, :create, :edit, :update]
   resources :tools, only: [:index, :show, :edit, :update] do

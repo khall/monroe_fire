@@ -1,4 +1,4 @@
-%table.certifications
+%table.certifications{border: "1"}
   %tr
     %td Firefighter
     - @courses.each do |c|
@@ -11,14 +11,14 @@
         - cert = certs.detect{|c| c.course_id == course.id }
         - if cert
           - if cert.complete?
-            %td.cert.complete
-              = link_to("", "certification/#{cert.id}?user_id=#{u.id}", method: :patch)
+            %td.cert.complete{id: "td_#{cert.id}"}
+              = link_to("&nbsp;".html_safe, "certifications/#{cert.id}/update_progress", method: :put, remote: true)
           - elsif cert.in_progress?
-            %td.cert.in-progress
-              = link_to("", "certification/#{cert.id}?user_id=#{u.id}", method: :patch)
+            %td.cert.in-progress{id: "td_#{cert.id}"}
+              = link_to("&nbsp;".html_safe, "certifications/#{cert.id}/update_progress", method: :put, remote: true)
           - else
-            %td.cert.incomplete
-              = link_to("", "certification/create", method: :post, data: {user: u, course: course})
+            %td.cert.incomplete{id: "td_#{cert.id}"}
+              = link_to("&nbsp;".html_safe, "certifications/#{cert.id}/update_progress", method: :put, remote: true)
         - else
-          %td.cert.incomplete
-            = link_to("", "certification/create", method: :post, data: {user: u, course: course})
+          %td.cert.incomplete{id: "td_#{u.id}_#{course.id}"}
+            = link_to("&nbsp;".html_safe, "certifications/gen?user_id=#{u.id}&course_id=#{course.id}", method: :put, remote: true)

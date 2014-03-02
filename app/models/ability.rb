@@ -35,6 +35,7 @@ class Ability
       can :create, User
     elsif user.chief?
       can :manage, Run
+      can :manage, Certification
     elsif user.firefighter?
       can :read, :all
     else # not logged in

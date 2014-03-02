@@ -26,4 +26,15 @@ describe CertificationsController do
       assigns[:users].detect{|u| u == u2}.certifications.to_a.include?(c2).should == true
     end
   end
+
+  describe "update_progress" do
+    it "should update progress for certification and return javascript that will update the TD's styling" do
+      u1 = Fabricate(:user, role: 'firefighter')
+      course1 = Fabricate(:course)
+      c1 = Fabricate(:certification, user: u1, course: course1, progress: "in-progress")
+      patch :update_progress, id: c1, user_id: u1
+      response.should be_success
+      Certification.find(c1).progress.should == "complete"
+    end
+  end
 end

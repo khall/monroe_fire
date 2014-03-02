@@ -45,6 +45,9 @@ table {
 
 table.certifications {
   border: 1px;
+  td {
+    border-color: lightgray;
+  }
   td.complete {
     background-color: green;
   }
@@ -55,5 +58,6 @@ table.certifications {
     display: block;
     width: 100%;
     height: 100%;
+    text-decoration: none;
   }
 }
