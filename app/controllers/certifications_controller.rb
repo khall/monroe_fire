@@ -2,7 +2,7 @@ class CertificationsController < ApplicationController
   #load_and_authorize_resource
 
   def index
-    @users = User.firefighters
+    @users = User.firefighters.sort_by{|u| u.name.split(' ').last}
     @courses = Course.all
   end
 
