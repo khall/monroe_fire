@@ -65,7 +65,7 @@ table {
       display: inline-block;
     }
     .name {
-      width: 200px;
+      width: 150px;
       height: 25px;
       overflow: visible;
     }
@@ -74,6 +74,7 @@ table {
       height: 22px;
       padding-top: 7px;
       border: 1px solid white;
+      white-space: nowrap;
     }
   }
   .user {
@@ -82,7 +83,7 @@ table {
       display: inline-block;
     }
     .name {
-      width: 200px;
+      width: 150px;
       height: 25px;
       text-align:right;
       .pad {

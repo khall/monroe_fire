@@ -2,7 +2,7 @@
   .header
     .name
     - @courses.each do |c|
-      .rotate= c.name.gsub(/ /, "&nbsp;").html_safe
+      .rotate= c.name
   - @users.each do |u|
     .user
       - certs = u.certifications
@@ -23,3 +23,5 @@
         - else
           .cert.incomplete{id: "td_#{u.id}_#{course.id}"}
             = link_to("&nbsp;".html_safe, "certifications/gen?user_id=#{u.id}&course_id=#{course.id}", method: :put, remote: true)
+:javascript
+  $('#main').css('width', '950px');
