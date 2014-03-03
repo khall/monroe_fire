@@ -37,7 +37,6 @@ class User < ActiveRecord::Base
         all_certs = mine if cert.id == mine.id
       end
     end
-    byebug
     list.sort(&:id)
   end
 end

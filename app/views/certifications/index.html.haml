@@ -13,15 +13,15 @@
         - if cert
           - if cert.complete?
             .cert.complete{id: "td_#{cert.id}"}
-              = link_to("&nbsp;".html_safe, "certifications/#{cert.id}/update_progress", method: :put, remote: true)
+              = existing_cert(cert.id)
           - elsif cert.in_progress?
             .cert.in-progress{id: "td_#{cert.id}"}
-              = link_to("&nbsp;".html_safe, "certifications/#{cert.id}/update_progress", method: :put, remote: true)
+              = existing_cert(cert.id)
           - else
             .cert.incomplete{id: "td_#{cert.id}"}
-              = link_to("&nbsp;".html_safe, "certifications/#{cert.id}/update_progress", method: :put, remote: true)
+              = existing_cert(cert.id)
         - else
           .cert.incomplete{id: "td_#{u.id}_#{course.id}"}
-            = link_to("&nbsp;".html_safe, "certifications/gen?user_id=#{u.id}&course_id=#{course.id}", method: :put, remote: true)
+            = new_cert(u.id, course.id)
 :javascript
   $('#main').css('width', '950px');
