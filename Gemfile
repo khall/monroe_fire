@@ -4,7 +4,7 @@ gem 'calendar_helper'
 gem 'cancan'
 gem 'devise', '~> 3.0.0.rc'
 gem 'haml'
-gem 'rails', '4.0.0'
+gem 'rails', '4.0.3'
 gem 'thin'
 gem 'unicorn'
 #gem 'rmagick'
@@ -15,14 +15,14 @@ gem 'execjs'
 gem 'therubyracer'
 
 # CMS
-gem 'comfortable_mexican_sofa', '~> 2.0.0.beta1'
+gem 'comfortable_mexican_sofa', '~> 1.12'
 
 gem 'pg'
 
 
 # Gems used only for assets and not required
 # in production environments by default.
-gem 'sass-rails',   '~> 4.0.0'
+gem 'sass-rails'
 gem 'coffee-rails'
 gem 'turbolinks'
 
@@ -53,5 +53,5 @@ end
 
 group :test, :development do
   # To use debugger
-  gem 'debugger'
+  gem 'byebug'
 end
