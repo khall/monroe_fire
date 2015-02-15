@@ -206,6 +206,23 @@ describe RunsController do
       flash[:alert].should == nil
     end
 
+    it "should create a new run that is 10+ hours in length" do
+      new_run_str = "2/13/13	25				1			20:57	5	0:05	0:09	23:55	00:00	00:05	01:00"
+
+      Run.all.length.should == 0
+      post :create, excel_str: new_run_str
+      runs = Run.all
+      runs.length.should == 1
+      runs[0].in_route_time.should == DateTime.parse("2013/02/14 00:00:00")
+      runs[0].arrived_time.should == DateTime.parse("2013/02/14 00:05:00")
+      runs[0].in_quarters_time.should == DateTime.parse("2013/02/14 01:00:00")
+
+      response.should be_success
+      response.should render_template(:new)
+      flash[:notice].should == "Run added"
+      flash[:alert].should == nil
+    end
+
     it "should deal with a four digit year" do
       new_run_str = "4/1/2013	47				1			0:20	8	0:04	0:11	6:28	6:32	6:39	6:48"
 
